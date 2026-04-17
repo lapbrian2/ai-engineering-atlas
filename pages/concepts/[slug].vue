@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import booksData from '~/data/books-index.json'
+import explainers from '~/data/concept-explainers.json'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
@@ -13,6 +14,9 @@ const concepts = (booksData as any).concepts as Array<{
 }>
 
 const concept = computed(() => concepts.find(c => c.id === slug.value))
+const explainer = computed(() => (explainers as any)[slug.value] as {
+  what: string; why: string; trap?: string; primary: string
+} | undefined)
 const depthLabel = ['Not covered', 'Mentioned', 'Substantive', 'Foundational']
 
 const relatedConcepts = computed(() => {
@@ -42,6 +46,29 @@ useHead(() => ({
         <p class="lede">
           Source coverage across the nine canonical works. Each row is a book; the bar shows how deeply that book treats this concept.
         </p>
+      </div>
+    </section>
+
+    <section v-if="concept && explainer" class="explainer">
+      <div class="max">
+        <div class="ex-grid">
+          <div class="ex-block">
+            <span class="overline">What it is</span>
+            <p>{{ explainer.what }}</p>
+          </div>
+          <div class="ex-block">
+            <span class="overline">Why it matters</span>
+            <p>{{ explainer.why }}</p>
+          </div>
+          <div v-if="explainer.trap" class="ex-block ex-trap">
+            <span class="overline">The trap</span>
+            <p>{{ explainer.trap }}</p>
+          </div>
+          <div class="ex-block ex-primary">
+            <span class="overline">Primary source</span>
+            <p>{{ explainer.primary }}</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -138,6 +165,49 @@ useHead(() => ({
   max-width: 20ch;
 }
 .lede { max-width: 52ch; }
+
+.explainer {
+  padding: clamp(48px, 6vw, 96px) 0;
+  border-bottom: 1px solid var(--line);
+}
+.ex-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+@media (max-width: 720px) { .ex-grid { grid-template-columns: 1fr; } }
+.ex-block {
+  background: var(--ink-2);
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ex-block .overline {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.ex-block p {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  font-weight: 400;
+}
+.ex-trap { border-left: 2px solid var(--accent); background: var(--ink-3); }
+.ex-trap p { color: var(--text-dim); }
+.ex-primary { grid-column: 1 / -1; background: var(--ink); }
+.ex-primary p {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--accent);
+}
 
 .coverage { padding: clamp(40px, 5vw, 72px) 0; }
 .coverage-grid {
