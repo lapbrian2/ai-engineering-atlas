@@ -47,7 +47,7 @@ Three properties of the data matter more than raw size:
 
 One consequence worth internalizing: cutoff dates matter. A model's knowledge of the world ends roughly when its pretraining data was collected. Anything after that — new APIs, new events, new facts — has to come in through the prompt, retrieval, or tools.
 
-<TokenizerDemo/>
+<TokenizerPrimitive/>
 
 ## Architecture essentials
 
