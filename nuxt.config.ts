@@ -50,6 +50,9 @@ export default defineNuxtConfig({
     build: {
       markdown: {
         toc: { depth: 3 },
+        remarkPlugins: {
+          'remark-gfm': {}
+        },
         highlight: {
           theme: {
             default: 'github-dark',
