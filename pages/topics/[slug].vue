@@ -166,6 +166,80 @@ useHead(() => ({
   color: var(--text-dim);
 }
 
+/* Superscript footnote references — clean out of reading flow */
+.prose :deep(sup a),
+.prose :deep(.footnote-ref) {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.6em;
+  text-decoration: none;
+  padding: 0 1px;
+  vertical-align: super;
+  line-height: 0;
+  transition: color var(--dur-sm) ease;
+  border-bottom: none;
+}
+.prose :deep(sup a:hover) { color: var(--text); border-bottom: none; }
+
+/* Sources section rendered from markdown footnote defs */
+.prose :deep(.footnotes) {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--text-dim);
+  counter-reset: footnotes;
+}
+.prose :deep(.footnotes::before) {
+  content: "Sources";
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.prose :deep(.footnotes ol) {
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.prose :deep(.footnotes li) {
+  padding: 12px 16px;
+  border-left: 2px solid var(--line-strong);
+  background: var(--ink-2);
+  margin-bottom: 0;
+  counter-increment: footnotes;
+  position: relative;
+  padding-left: 48px;
+}
+.prose :deep(.footnotes li::before) {
+  content: counter(footnotes);
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.prose :deep(.footnotes li p) { margin: 0; display: inline; }
+.prose :deep(.footnotes li:target) {
+  border-left-color: var(--accent);
+  background: var(--ink-3);
+}
+.prose :deep(.footnotes .footnote-backref) {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: 8px;
+  text-decoration: none;
+  border-bottom: none;
+}
+.prose :deep(.footnotes .footnote-backref:hover) { color: var(--accent); }
+
 .citations {
   padding: clamp(40px, 5vw, 72px) 0;
   border-top: 1px solid var(--line);
