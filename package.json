@@ -1,0 +1,33 @@
+{
+  "name": "ai-engineering-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An open, citable synthesis of AI engineering — rendered as a reference work, not a tutorial.",
+  "author": "Brian Lapinski",
+  "license": "CC-BY-NC-4.0",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate && pagefind --site .output/public",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@nuxt/content": "^3.2.0",
+    "@xenova/transformers": "^2.17.2",
+    "gsap": "^3.13.0",
+    "nuxt": "^4.0.0",
+    "splitting": "^1.1.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^0.5.0",
+    "@types/node": "^22.0.0",
+    "pagefind": "^1.1.1",
+    "typescript": "^5.6.0",
+    "vue-tsc": "^2.1.0"
+  }
+}

@@ -1,0 +1,112 @@
+/* ================================================================
+   AI Engineering Atlas — Base styles
+   Reset, body defaults, focus, reduced-motion, selection.
+================================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+  background: var(--ink);
+  color: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  position: relative;
+}
+
+a, button {
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  border: none;
+  background: none;
+}
+
+img, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Typography utilities ---- */
+.display {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-size: var(--fs-display);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.display em {
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.display .accent-word {
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-variation-settings: "opsz" 96, "SOFT" 50;
+  font-size: var(--fs-h2);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+.h2 em { font-style: italic; font-weight: 300; }
+.h2 .accent-word { color: var(--accent); font-style: italic; }
+
+.overline {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: var(--fs-overline);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.lede {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: var(--fs-lede);
+  line-height: 1.55;
+  color: var(--text-dim);
+  max-width: 52ch;
+}
+
+.meta {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

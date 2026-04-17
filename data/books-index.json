@@ -1,0 +1,777 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-04-17",
+  "depth_scale": {
+    "0": "not covered",
+    "1": "mentioned",
+    "2": "substantive",
+    "3": "foundational"
+  },
+  "books": [
+    {
+      "id": "huyen-aie",
+      "title": "AI Engineering: Building Applications with Foundation Models",
+      "author": "Chip Huyen",
+      "year": 2025,
+      "publisher": "O'Reilly",
+      "repo": "https://github.com/chiphuyen/aie-book",
+      "amazon": "https://www.amazon.com/AI-Engineering-Building-Applications-Foundation/dp/1098166302",
+      "short": "Huyen \u00b7 AI Eng.",
+      "toc_quality": "complete",
+      "pages_verified": true
+    },
+    {
+      "id": "phoenix-taylor-prompt",
+      "title": "Prompt Engineering for Generative AI",
+      "author": "James Phoenix, Mike Taylor",
+      "year": 2024,
+      "publisher": "O'Reilly",
+      "repo": "https://github.com/BrightPool/prompt-engineering-for-generative-ai-examples",
+      "amazon": "https://www.amazon.com/Prompt-Engineering-Generative-AI-Techniques/dp/109815343X",
+      "short": "Phoenix \u00b7 Prompt GenAI",
+      "toc_quality": "chapter-titles-only",
+      "pages_verified": false
+    },
+    {
+      "id": "iusztin-labonne-handbook",
+      "title": "LLM Engineer's Handbook",
+      "author": "Paul Iusztin, Maxime Labonne",
+      "year": 2024,
+      "publisher": "Packt",
+      "repo": "https://github.com/PacktPublishing/LLM-Engineers-Handbook",
+      "amazon": "https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072",
+      "short": "Iusztin \u00b7 LLM Eng HB",
+      "toc_quality": "repo-structure-inferred",
+      "pages_verified": false
+    },
+    {
+      "id": "huyen-dmls",
+      "title": "Designing Machine Learning Systems",
+      "author": "Chip Huyen",
+      "year": 2022,
+      "publisher": "O'Reilly",
+      "repo": "https://github.com/chiphuyen/dmls-book",
+      "amazon": "https://www.amazon.com/Designing-Machine-Learning-Systems-Production-Ready/dp/1098107969",
+      "short": "Huyen \u00b7 DMLS",
+      "toc_quality": "complete",
+      "pages_verified": false
+    },
+    {
+      "id": "raschka-from-scratch",
+      "title": "Build a Large Language Model (From Scratch)",
+      "author": "Sebastian Raschka",
+      "year": 2024,
+      "publisher": "Manning",
+      "repo": "https://github.com/rasbt/LLMs-from-scratch",
+      "amazon": "https://www.amazon.com/gp/product/1633437167",
+      "short": "Raschka \u00b7 From Scratch",
+      "toc_quality": "complete",
+      "pages_verified": false
+    },
+    {
+      "id": "bouchard-production",
+      "title": "Building LLMs for Production: Enhancing LLM Abilities and Reliability with Prompting, Fine-Tuning, and RAG",
+      "author": "Louis-Fran\u00e7ois Bouchard, Louie Peters",
+      "year": 2024,
+      "publisher": "Towards AI",
+      "repo": "https://github.com/louisfb01/start-llms",
+      "repo_note": "Official companion repo is louisfb01/start-llms (book-referenced learning path, not code chapters)",
+      "amazon": "https://www.amazon.com/Building-LLMs-Production-Reliability-Fine-Tuning/dp/B0D4FFPFW8",
+      "short": "Bouchard \u00b7 LLMs Prod",
+      "toc_quality": "chapter-list-verified",
+      "pages_verified": false
+    },
+    {
+      "id": "alammar-grootendorst-hands-on",
+      "title": "Hands-On Large Language Models",
+      "author": "Jay Alammar, Maarten Grootendorst",
+      "year": 2024,
+      "publisher": "O'Reilly",
+      "repo": "https://github.com/HandsOnLLM/Hands-On-Large-Language-Models",
+      "amazon": "https://www.amazon.com/Hands-Large-Language-Models-Understanding/dp/1098150961",
+      "short": "Alammar \u00b7 Hands-On",
+      "toc_quality": "complete",
+      "pages_verified": false
+    },
+    {
+      "id": "berryman-ziegler-prompt-llms",
+      "title": "Prompt Engineering for LLMs: The Art and Science of Building Large Language Model-Based Applications",
+      "author": "John Berryman, Albert Ziegler",
+      "year": 2024,
+      "publisher": "O'Reilly",
+      "repo": null,
+      "repo_note": "No public companion repo; user-supplied jberryman/prompt-engineering-for-llms returns 404",
+      "amazon": "https://www.amazon.com/Prompt-Engineering-LLMs-Model-Based-Applications/dp/1098156153",
+      "short": "Berryman \u00b7 Prompt LLMs",
+      "toc_quality": "chapter-titles-only",
+      "pages_verified": false
+    },
+    {
+      "id": "caldwell-bible",
+      "title": "The AI Engineering Bible: The Complete and Up-to-Date Guide to Build, Develop and Scale Production Ready AI Systems",
+      "author": "Thomas R. Caldwell",
+      "year": 2025,
+      "publisher": "Self-published",
+      "repo": null,
+      "repo_note": "User-supplied Thomas-Caldwell/AI-Engineering-Bible returns 404; book appears to have no companion repo",
+      "amazon": "https://www.amazon.com/Engineering-Bible-Up-Date-Production/dp/B0F672GWRZ",
+      "short": "Caldwell \u00b7 AI Eng Bible",
+      "toc_quality": "description-only",
+      "pages_verified": false,
+      "coverage_caveat": "No public chapter list available; depth estimates are inferred from marketing copy which claims comprehensive coverage of full AI lifecycle. All entries below are genre-inferred and flagged low-confidence."
+    }
+  ],
+  "topics": [
+    { "id": "foundation-models", "name": "Foundation Models & Architecture" },
+    { "id": "prompting", "name": "Prompting" },
+    { "id": "evaluation", "name": "Evaluation" },
+    { "id": "rag", "name": "RAG & Retrieval" },
+    { "id": "agents", "name": "Agents & Tool Use" },
+    { "id": "finetuning", "name": "Finetuning & Adaptation" },
+    { "id": "data", "name": "Dataset Engineering" },
+    { "id": "inference", "name": "Inference & Deployment" },
+    { "id": "production", "name": "Production Architecture" }
+  ],
+  "concepts": [
+    {
+      "id": "tokenization",
+      "name": "Tokenization & BPE",
+      "topic": "foundation-models",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2 (Sampling Fundamentals context)", "pages": "88-90", "depth": 1, "note": "Brief in sampling section; not the main focus" },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 2 Working with Text Data", "pages": null, "depth": 3, "note": "Dedicated chapter; BPE from scratch, tiktoken comparison, dataloader intuition" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 2 Tokens and Embeddings", "pages": null, "depth": 3, "note": "Dedicated chapter on tokens and token embeddings" },
+        { "book": "bouchard-production", "chapter": "Ch. I-II", "pages": null, "depth": 2, "note": "Covered in LLM building blocks section" },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 2 Understanding LLMs", "pages": null, "depth": 2, "note": "Tokenizers discussed as part of how LLMs see the world" },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 2 Intro to Text Generation Models", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. on LLM basics", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown (genre-inferred)", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "attention-mechanism",
+      "name": "Attention Mechanism",
+      "topic": "foundation-models",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2 Model Architecture", "pages": "58-67", "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 3 Coding Attention Mechanisms", "pages": null, "depth": 3, "note": "Entire chapter implementing self-attention, multi-head, causal masking from scratch" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 3 Looking Inside Transformer LLMs", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. II LLM Architectures", "pages": null, "depth": 2, "note": "Covers attention, masked self-attention, encoder/decoder variants" },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 2 Understanding LLMs", "pages": null, "depth": 1, "note": "Transformer architecture overview" },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 2", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "transformer-architecture",
+      "name": "Transformer Architecture",
+      "topic": "foundation-models",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2 Model Architecture", "pages": "58-67", "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 4 Implementing a GPT Model from Scratch", "pages": null, "depth": 3, "note": "Full GPT implementation; bonus content: GQA, MLA, SWA, MoE" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 3 Looking Inside Transformer LLMs", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. II", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 2", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 2", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "positional-encoding",
+      "name": "Positional Encoding",
+      "topic": "foundation-models",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 2-3", "pages": null, "depth": 3, "note": "Absolute and learned positional embeddings implemented from scratch" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 3", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. II", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 0 }
+      ]
+    },
+    {
+      "id": "sampling-strategies",
+      "name": "Sampling Strategies (temperature, top-k, top-p)",
+      "topic": "foundation-models",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2 Sampling", "pages": "88-111", "depth": 3, "note": "Full section: fundamentals, strategies, test-time compute, structured outputs" },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 5 Pretraining", "pages": null, "depth": 2, "note": "Temperature and top-k in generation section" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 7 Advanced Text Generation", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 2 + Ch. 7 Taming the Model", "pages": null, "depth": 3, "note": "Temperature and probabilities discussed prominently" },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 2-3", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. III LLMs in Practice", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "zero-shot-few-shot",
+      "name": "Zero-Shot & Few-Shot Prompting",
+      "topic": "prompting",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 5 Prompt Engineering", "pages": "213-215", "depth": 3, "note": "In-Context Learning: Zero-Shot and Few-Shot section" },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 1 Five Pillars + Ch. 3-4", "pages": null, "depth": 3, "note": "Provide Examples is a core pillar" },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 5 Prompt Content", "pages": null, "depth": 3, "note": "Few-Shot Prompting dedicated subsection" },
+        { "book": "bouchard-production", "chapter": "Ch. IV Introduction to Prompting", "pages": null, "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 6 Prompt Engineering", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "chain-of-thought",
+      "name": "Chain-of-Thought",
+      "topic": "prompting",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 5 Best Practices (Give the Model Time to Think)", "pages": "227-229", "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 3-4", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 8 Conversational Agency", "pages": null, "depth": 3, "note": "Chain of Thought and ReAct dedicated sections" },
+        { "book": "bouchard-production", "chapter": "Ch. IV + Ch. VII", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 6-7", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "self-consistency",
+      "name": "Self-Consistency",
+      "topic": "prompting",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2 Test Time Compute", "pages": "96-99", "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 8", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 4", "pages": null, "depth": 1 },
+        { "book": "bouchard-production", "chapter": "Ch. VII", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 7", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "perplexity-metrics",
+      "name": "Perplexity & Language Model Metrics",
+      "topic": "evaluation",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 3 Understanding Language Modeling Metrics", "pages": "118-125", "depth": 3, "note": "Entropy, cross entropy, bits-per-char/byte, perplexity interpretation" },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 5 Pretraining", "pages": null, "depth": 2, "note": "Training loss as cross-entropy; perplexity in evaluation" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 3", "pages": null, "depth": 1 },
+        { "book": "bouchard-production", "chapter": "Ch. III", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10 Evaluating", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "Ch. 6 Offline Evaluation", "pages": null, "depth": 1 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "exact-match-eval",
+      "name": "Exact Match Eval",
+      "topic": "evaluation",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 3 Exact Evaluation", "pages": "125-135", "depth": 3, "note": "Functional correctness, similarity measurements, embedding-based" },
+        { "book": "huyen-dmls", "chapter": "Ch. 6 Model Development and Offline Evaluation", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 12 Fine-tuning Generation", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. on Evaluation", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 1 (Evaluate Quality)", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 6", "pages": null, "depth": 1 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "ai-judge",
+      "name": "AI-as-Judge",
+      "topic": "evaluation",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 3 AI as a Judge", "pages": "136-148", "depth": 3, "note": "Why, how, limitations, what models can judge" },
+        { "book": "iusztin-labonne-handbook", "chapter": "Opik monitoring / evaluation", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 12", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 1", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 7 (ollama_evaluate.py)", "pages": null, "depth": 2, "note": "Appendix/bonus: LLM-as-judge evaluation in reasoning-from-scratch" },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "comparative-eval",
+      "name": "Comparative Eval",
+      "topic": "evaluation",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 3 Ranking Models with Comparative Evaluation", "pages": "148-156", "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. on Evaluation", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "Ch. 6", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "bouchard-production", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 1, "note": "MMLU evaluation in companion reasoning book" },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "benchmarks",
+      "name": "Benchmarks",
+      "topic": "evaluation",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 4 Navigate Public Benchmarks", "pages": "191-200", "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 4 Text Classification", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. on Evaluation", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. III", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 1, "note": "MATH-500, MMLU, leaderboards in companion reasoning book" },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "rag-architecture",
+      "name": "RAG Architecture",
+      "topic": "rag",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 RAG", "pages": "253-275", "depth": 3, "note": "Architecture, retrieval algos, optimization, beyond text" },
+        { "book": "bouchard-production", "chapter": "Ch. V RAG + Ch. IX Advanced RAG", "pages": null, "depth": 3, "note": "Two full chapters dedicated" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 8 Semantic Search and RAG", "pages": null, "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Simple RAG + Chapters on data/retrieval", "pages": null, "depth": 3, "note": "Featured as a core system pillar" },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 4-5 LangChain + Vector DBs", "pages": null, "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 5 Prompt Content (RAG)", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "embeddings",
+      "name": "Embeddings",
+      "topic": "rag",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 3 Introduction to Embedding + Ch. 6 Retrieval", "pages": "134, 257-268", "depth": 3 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 2 Working with Text Data", "pages": null, "depth": 3, "note": "Token embeddings from scratch; embedding layer vs matmul" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 2 + Ch. 10 Creating Text Embedding Models", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. V + Ch. VIII Retrievers", "pages": null, "depth": 3 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 5 Vector Databases", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. on RAG (Qdrant vector DB)", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 5", "pages": null, "depth": 2 },
+        { "book": "huyen-dmls", "chapter": "Ch. 5 Feature Engineering", "pages": null, "depth": 1 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "vector-search",
+      "name": "Vector Search (dense + BM25)",
+      "topic": "rag",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Retrieval Algorithms", "pages": "257-268", "depth": 3, "note": "Dense retrieval, BM25, hybrid" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 8", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. VIII Retrievers", "pages": null, "depth": 3 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 5 Vector Databases", "pages": null, "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. RAG (Qdrant)", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 5", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "chunking",
+      "name": "Chunking",
+      "topic": "rag",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Retrieval Optimization", "pages": "268-273", "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. VIII + Ch. IX", "pages": null, "depth": 3 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 4 LangChain (Text Splitters)", "pages": null, "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 8", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. RAG", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 6 Assembling the Prompt", "pages": null, "depth": 2, "note": "Snippet handling" },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "re-ranking",
+      "name": "Re-ranking",
+      "topic": "rag",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Retrieval Optimization", "pages": "268-273", "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. IX Advanced RAG", "pages": null, "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 8", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 5", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. RAG", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 5-6", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "agents-react",
+      "name": "Agents & ReAct",
+      "topic": "agents",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Agents", "pages": "275-305", "depth": 3, "note": "Overview, tools, planning, failure modes, memory" },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 6 Autonomous Agents with Memory and Tools", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. X Agents", "pages": null, "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 8 Conversational Agency", "pages": null, "depth": 3, "note": "ReAct explicitly covered" },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 7 Advanced Text Generation (agents)", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "tool-use",
+      "name": "Tool Use",
+      "topic": "agents",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Tools", "pages": "278-281", "depth": 3 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 6 + Ch. 4 (function calling)", "pages": null, "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 8 Tool Usage", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. X", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 7", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "agent-planning",
+      "name": "Agent Planning",
+      "topic": "agents",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Planning", "pages": "281-298", "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. X", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 4 Task Decomposition", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 8-9 LLM Workflows", "pages": null, "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 7", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "agent-memory",
+      "name": "Agent Memory",
+      "topic": "agents",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 6 Memory", "pages": "300-305", "depth": 3 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 6", "pages": null, "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 8 Context for Task-Based Interactions", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. X", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 7", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "finetuning-when",
+      "name": "Finetuning (when to)",
+      "topic": "finetuning",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 7 When to Finetune", "pages": "311-319", "depth": 3, "note": "Reasons to/not to, finetuning vs RAG" },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. LLM training pipeline", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. XI Fine-Tuning", "pages": null, "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 11-12 Fine-tuning", "pages": null, "depth": 3 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 6 + Ch. 7", "pages": null, "depth": 3, "note": "Classification finetuning + instruction finetuning from scratch" },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 3 Moving to Chat", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "lora-qlora",
+      "name": "LoRA & QLoRA",
+      "topic": "finetuning",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 7 Parameter-Efficient Finetuning", "pages": "333-347", "depth": 3 },
+        { "book": "raschka-from-scratch", "chapter": "Appendix E Parameter-Efficient Finetuning with LoRA", "pages": null, "depth": 3, "note": "Full LoRA implementation from scratch" },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. training pipeline", "pages": null, "depth": 3, "note": "Labonne is known for LoRA/QLoRA work" },
+        { "book": "bouchard-production", "chapter": "Ch. XI (SFT with LoRA, RLHF)", "pages": null, "depth": 3 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 12", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "quantization",
+      "name": "Quantization",
+      "topic": "finetuning",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 7 Quantization + Ch. 9 Model Optimization", "pages": "328-332, 426-440", "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. XII Deployment and Optimization", "pages": null, "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. deployment", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 12 + bonus Visual Guide to Quantization", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "Bonus (memory-efficient loading)", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "model-merging",
+      "name": "Model Merging",
+      "topic": "finetuning",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 7 Model Merging and Multi-Task Finetuning", "pages": "347-357", "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 2, "note": "Labonne's mergekit is well-known; likely referenced in training chapter" },
+        { "book": "bouchard-production", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 0 }
+      ]
+    },
+    {
+      "id": "dataset-curation",
+      "name": "Dataset Curation",
+      "topic": "data",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 8 Data Curation", "pages": "365-380", "depth": 3, "note": "Quality, coverage, quantity, acquisition" },
+        { "book": "huyen-dmls", "chapter": "Ch. 3-4 Data Engineering + Training Data", "pages": null, "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. data collection / generation", "pages": null, "depth": 3 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 7 (dataset utilities)", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. VIII Data Preparation", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 5 Text Clustering", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "data-quality",
+      "name": "Data Quality",
+      "topic": "data",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 8 Data Quality", "pages": "368-370", "depth": 3 },
+        { "book": "huyen-dmls", "chapter": "Ch. 3-4 + Ch. 8 Data Distribution Shifts", "pages": null, "depth": 3, "note": "Core theme throughout" },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. data generation", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 7 bonus", "pages": null, "depth": 1 },
+        { "book": "bouchard-production", "chapter": "Ch. VIII", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "data-synthesis",
+      "name": "Data Synthesis",
+      "topic": "data",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 8 Data Augmentation and Synthesis", "pages": "380-396", "depth": 3, "note": "Traditional, AI-powered, model distillation" },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. data generation", "pages": null, "depth": 3 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 7 bonus: Generating dataset for instruction finetuning", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. VIII + Ch. XI", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "huyen-dmls", "chapter": "Ch. 4 Training Data", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "inference-optimization",
+      "name": "Inference Optimization",
+      "topic": "inference",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 9 Inference Optimization", "pages": "405-447", "depth": 3, "note": "Entire chapter; metrics, accelerators, model and service opt" },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 3 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. deployment (AWS SageMaker)", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 5 bonus + optimized Qwen3", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 12 bonus", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "Ch. 7 Deployment (non-LLM)", "pages": null, "depth": 1 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "kv-cache",
+      "name": "KV Cache",
+      "topic": "inference",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 9 Model Optimization", "pages": "426-440", "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "Ch. 4 bonus KV Cache", "pages": null, "depth": 3, "note": "Dedicated bonus notebook" },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "speculative-decoding",
+      "name": "Speculative Decoding",
+      "topic": "inference",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 9 Inference Service Optimization", "pages": "440-447", "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "model-routing",
+      "name": "Model Routing",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 10 Add Model Router and Gateway", "pages": "456-460", "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 4 Designing LLM Applications", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "guardrails",
+      "name": "Guardrails",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 10 Put in Guardrails + Ch. 5 Defensive Prompt Engineering", "pages": "235-251, 451-456", "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 7 Taming the Model", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. IV + Ch. XII", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Opik prompt monitoring", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 10 Building AI-powered Applications", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "Ch. 11 Responsible AI", "pages": null, "depth": 1 },
+        { "book": "caldwell-bible", "chapter": "Unknown (ethics/compliance mentioned)", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "gateway-caching",
+      "name": "Gateway & Caching",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 10 Add Model Router and Gateway + Reduce Latency with Caches", "pages": "456-463", "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 4", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "monitoring",
+      "name": "Monitoring",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 10 Monitoring and Observability", "pages": "465-474", "depth": 3 },
+        { "book": "huyen-dmls", "chapter": "Ch. 8 Data Distribution Shifts and Monitoring", "pages": null, "depth": 3, "note": "Foundational chapter" },
+        { "book": "iusztin-labonne-handbook", "chapter": "Comprehensive monitoring + Opik", "pages": null, "depth": 3 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10 Evaluating", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "cost-modeling",
+      "name": "Cost Modeling",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 4 Cost and Latency + Ch. 9", "pages": "177-179, 412-419", "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 4 Designing LLM Applications", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Ch. deployment", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 1", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "Ch. 10 Infrastructure", "pages": null, "depth": 1 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "user-feedback",
+      "name": "User Feedback Extraction",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 10 User Feedback", "pages": "474-492", "depth": 3, "note": "Extracting conversational feedback, design, limitations" },
+        { "book": "huyen-dmls", "chapter": "Ch. 9 Continual Learning + Ch. 4 Natural Labels", "pages": null, "depth": 2 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 10", "pages": null, "depth": 1 },
+        { "book": "bouchard-production", "chapter": "Ch. XII", "pages": null, "depth": 1 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "phoenix-taylor-prompt", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    },
+    {
+      "id": "hallucinations",
+      "name": "Hallucinations",
+      "topic": "evaluation",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 2 Probabilistic Nature + Ch. 4 Generation Capability", "pages": "105-111, 163-172", "depth": 3 },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 2 Hallucinations", "pages": null, "depth": 3, "note": "Dedicated section" },
+        { "book": "bouchard-production", "chapter": "Ch. V RAG (as mitigation)", "pages": null, "depth": 2 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "Ch. 8", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 1 (Evaluate Quality)", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "Monitoring ch", "pages": null, "depth": 2 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 2 }
+      ]
+    },
+    {
+      "id": "prompt-injection",
+      "name": "Prompt Injection",
+      "topic": "production",
+      "coverage": [
+        { "book": "huyen-aie", "chapter": "Ch. 5 Defensive Prompt Engineering", "pages": "235-251", "depth": 3, "note": "Jailbreaking, injection, information extraction, defenses" },
+        { "book": "berryman-ziegler-prompt-llms", "chapter": "Ch. 7 Taming the Model", "pages": null, "depth": 2 },
+        { "book": "phoenix-taylor-prompt", "chapter": "Ch. 10", "pages": null, "depth": 2 },
+        { "book": "bouchard-production", "chapter": "Ch. IV", "pages": null, "depth": 2 },
+        { "book": "iusztin-labonne-handbook", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "alammar-grootendorst-hands-on", "chapter": "-", "pages": null, "depth": 1 },
+        { "book": "raschka-from-scratch", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "huyen-dmls", "chapter": "-", "pages": null, "depth": 0 },
+        { "book": "caldwell-bible", "chapter": "Unknown", "pages": null, "depth": 1 }
+      ]
+    }
+  ]
+}

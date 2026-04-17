@@ -1,0 +1,73 @@
+/* ================================================================
+   AI Engineering Atlas — Design Tokens
+   Single source of truth for typography, color, motion, spacing.
+   Extracted from the v3 prototype. Do not inline-duplicate these
+   values in component styles; always reference via var().
+================================================================ */
+
+:root {
+  /* --- Color: canvas --- */
+  --ink:          #0A0A0E;   /* primary background (dark mode) */
+  --ink-2:        #111117;   /* elevated surface */
+  --ink-3:        #181820;   /* card surface */
+  --surface:      #14141B;   /* interstitial surface */
+
+  /* --- Color: cream (reading-mode) --- */
+  --cream:        #F6F2EA;   /* primary background (light mode) */
+  --cream-2:      #EBE6D8;   /* elevated surface */
+  --ink-on-cream: #0A0A0E;   /* primary text on cream */
+
+  /* --- Color: text --- */
+  --text:         #E8E8EE;   /* primary text on dark */
+  --text-dim:     #9D9DA8;   /* secondary text on dark */
+  --text-muted:   #6C6C78;   /* tertiary text on dark */
+
+  /* --- Color: rules & lines --- */
+  --line:         rgba(232, 232, 238, 0.07);
+  --line-strong:  rgba(232, 232, 238, 0.16);
+
+  /* --- Color: accent --- */
+  --accent:        #D15B2C;                        /* warm terracotta */
+  --accent-dim:    rgba(209, 91, 44, 0.14);
+  --accent-soft:   rgba(209, 91, 44, 0.04);
+  --accent-glow:   rgba(209, 91, 44, 0.32);
+
+  /* --- Typography families --- */
+  --serif:  'Fraunces', ui-serif, Georgia, serif;
+  --sans:   'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --mono:   'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* --- Typography scale (clamp-based, fluid) --- */
+  --fs-display: clamp(3.75rem, 12vw, 12rem);
+  --fs-h2:      clamp(2.2rem, 5vw, 4rem);
+  --fs-h3:      clamp(1.4rem, 2vw, 2rem);
+  --fs-lede:    clamp(1rem, 1.3vw, 1.15rem);
+  --fs-body:    16px;
+  --fs-small:   13.5px;
+  --fs-meta:    10.5px;
+  --fs-overline:10.5px;
+
+  /* --- Motion: easing --- */
+  --ease-enter:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-premium: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring:  cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* --- Motion: duration --- */
+  --dur-xs: 120ms;
+  --dur-sm: 200ms;
+  --dur-md: 320ms;
+  --dur-lg: 520ms;
+  --dur-xl: 900ms;
+
+  /* --- Spacing: layout --- */
+  --gutter: clamp(20px, 4vw, 56px);
+  --rhythm: clamp(80px, 12vw, 180px);
+
+  /* --- Z-index scale --- */
+  --z-grain:    1;
+  --z-content:  2;
+  --z-nav:     50;
+  --z-progress:60;
+  --z-cursor: 100;
+  --z-modal:  200;
+}
