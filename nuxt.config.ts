@@ -9,6 +9,11 @@ export default defineNuxtConfig({
     '@nuxt/content'
   ],
 
+  // ---- Components: auto-import by filename without path prefix ----
+  components: [
+    { path: '~/components', pathPrefix: false }
+  ],
+
   // ---- App head ----
   app: {
     head: {
@@ -61,6 +66,7 @@ export default defineNuxtConfig({
     preset: 'vercel-static',
     prerender: {
       crawlLinks: true,
+      failOnError: false,
       routes: ['/']
     }
   },
