@@ -20,7 +20,7 @@ useHead({
 
     <TopicsGrid />
 
-    <ConceptAtlasPin />
+    <ConceptAtlas3D />
 
     <PathsGrid />
   </main>
