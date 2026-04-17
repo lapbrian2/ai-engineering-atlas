@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineering Atlas — v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
+<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+<style>
+  :root {
+    --ink:         #0A0A0E;
+    --ink-2:       #111117;
+    --ink-3:       #181820;
+    --surface:     #14141B;
+    --line:        rgba(232, 232, 238, 0.07);
+    --line-strong: rgba(232, 232, 238, 0.16);
+    --text:        #E8E8EE;
+    --text-dim:    #9D9DA8;
+    --text-muted:  #6C6C78;
+    --cream:       #F6F2EA;
+    --cream-2:     #EBE6D8;
+    --ink-on-cream:#0A0A0E;
+    --accent:      #D15B2C;
+    --accent-dim:  rgba(209, 91, 44, 0.14);
+    --accent-soft: rgba(209, 91, 44, 0.04);
+    --accent-glow: rgba(209, 91, 44, 0.32);
+
+    --serif: 'Fraunces', ui-serif, Georgia, serif;
+    --sans:  'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+    --ease-enter:  cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-premium: cubic-bezier(0.32, 0.72, 0, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --gutter: clamp(20px, 4vw, 56px);
+    --rhythm: clamp(80px, 12vw, 180px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans); font-weight: 400;
+    background: var(--ink); color: var(--text);
+    font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden; cursor: none;
+    position: relative;
+  }
+  a, button { color: inherit; text-decoration: none; cursor: none; font: inherit; border: none; background: none; }
+  img, canvas { display: block; max-width: 100%; }
+  ::selection { background: var(--accent); color: var(--ink); }
+
+  /* ---- Grain: static noise, no mix-blend-mode (compositing cost too high) ---- */
+  .grain {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.8'/></svg>");
+    will-change: auto;
+  }
+
+  /* ---- Custom cursor ---- */
+  .cursor { position: fixed; top: 0; left: 0; z-index: 100; pointer-events: none; }
+  .cursor .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transform: translate(-50%, -50%); transition: transform 200ms var(--ease-enter); }
+  .cursor .ring { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line-strong); position: absolute; top: 0; left: 0; transform: translate(-50%, -50%); transition: transform 320ms var(--ease-premium), border-color 220ms ease, width 260ms var(--ease-premium), height 260ms var(--ease-premium); }
+  body.cursor-hover .cursor .ring { width: 68px; height: 68px; border-color: var(--accent); }
+  body.cursor-hover .cursor .dot { transform: translate(-50%, -50%) scale(0); }
+  @media (pointer: coarse) { .cursor { display: none; } body, a, button { cursor: auto; } }
+
+  /* ---- Type scale ---- */
+  .display {
+    font-family: var(--serif); font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-size: clamp(3.75rem, 12vw, 12rem);
+    line-height: 0.88; letter-spacing: -0.03em;
+  }
+  .display em { font-style: italic; font-weight: 400; font-variation-settings: "opsz" 144, "SOFT" 100; color: var(--text); }
+  .display .accent-word { color: var(--accent); font-style: italic; font-weight: 300; }
+
+  .h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 0.98; letter-spacing: -0.02em;
+  }
+  .h2 em { font-style: italic; font-weight: 300; }
+  .h2 .accent-word { color: var(--accent); font-style: italic; }
+
+  .overline {
+    font-family: var(--mono); font-weight: 500;
+    font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .lede {
+    font-family: var(--sans); font-weight: 400;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    line-height: 1.55; color: var(--text-dim);
+    max-width: 52ch;
+  }
+  .meta {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ---- Layout ---- */
+  .wrap { padding: 0 var(--gutter); position: relative; z-index: 2; }
+  .max  { max-width: 1600px; margin: 0 auto; }
+
+  /* ---- Nav ---- */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 20px var(--gutter);
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background-color 320ms var(--ease-enter), backdrop-filter 320ms ease, border-color 320ms ease;
+    border-bottom: 1px solid transparent;
+  }
+  .topbar.scrolled {
+    background: rgba(10, 10, 14, 0.92);
+    border-bottom-color: var(--line);
+  }
+  .brand {
+    font-family: var(--serif); font-weight: 400;
+    font-variation-settings: "opsz" 48;
+    font-size: 20px; letter-spacing: -0.01em; color: var(--text);
+    display: flex; align-items: baseline; gap: 0.35ch;
+  }
+  .brand em { font-style: italic; font-weight: 300; color: var(--accent); }
+  nav.primary { display: flex; gap: 30px; }
+  nav.primary a {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-dim); position: relative;
+    transition: color 260ms var(--ease-enter);
+  }
+  nav.primary a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -6px;
+    height: 1px; background: var(--accent);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 360ms var(--ease-premium);
+  }
+  nav.primary a:hover { color: var(--text); }
+  nav.primary a:hover::after { transform: scaleX(1); transform-origin: left; }
+  nav.primary a.active { color: var(--accent); }
+  nav.primary a.active::after { transform: scaleX(1); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 12px; border: 1px solid var(--line-strong);
+    transition: color 240ms var(--ease-enter), border-color 240ms ease;
+  }
+  .nav-cta:hover { color: var(--text); border-color: var(--accent); }
+  .nav-cta .k { color: var(--accent); font-weight: 500; }
+
+  /* ---- Hero ---- */
+  .hero {
+    position: relative; min-height: 100svh;
+    padding: 150px var(--gutter) 96px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: hidden;
+  }
+  .hero-shader { position: absolute; inset: 0; z-index: 0; }
+  .hero-shader canvas { width: 100%; height: 100%; display: block; }
+  .hero-shader::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 70% at 50% 65%, transparent 0%, var(--ink) 92%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 2; max-width: 1600px; margin: 0 auto; width: 100%; }
+
+  .hero-meta { display: flex; align-items: center; gap: 16px; margin-bottom: clamp(30px, 4vw, 56px); opacity: 0; transform: translateY(20px); }
+  .hero-meta .tick { width: 28px; height: 1px; background: var(--accent); }
+  .hero-meta .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); }
+  .hero-meta .label strong { color: var(--accent); font-weight: 500; }
+
+  /* Splitting-driven hero headline */
+  .hero-head .word { overflow: hidden; display: inline-flex; }
+  .hero-head .word .char { display: inline-block; transform: translateY(110%); opacity: 0; }
+  .hero-head .word .whitespace { width: 0.3em; }
+
+  .hero-foot {
+    margin-top: clamp(40px, 6vw, 84px);
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 48px;
+    align-items: end;
+    opacity: 0; transform: translateY(24px);
+  }
+  @media (max-width: 860px) { .hero-foot { grid-template-columns: 1fr; } }
+  .hero-specimen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+  .hero-specimen .item {
+    padding: 16px 14px 0 0;
+    border-right: 1px solid var(--line-strong);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .hero-specimen .item:last-child { border-right: none; padding-right: 0; }
+  .hero-specimen .item .n {
+    font-family: var(--serif); font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-size: clamp(2rem, 3.1vw, 2.7rem);
+    color: var(--text); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-specimen .item .n em { color: var(--accent); font-style: italic; }
+  .hero-specimen .item .l { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+
+  .scroll-cue {
+    position: absolute; bottom: 28px; left: var(--gutter); z-index: 2;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .scroll-cue .bar { position: relative; width: 34px; height: 1px; background: var(--line-strong); overflow: hidden; }
+  .scroll-cue .bar::after { content: ''; position: absolute; inset: 0; background: var(--accent); transform: translateX(-100%); animation: scroll-tick 2.6s var(--ease-premium) infinite; }
+  @keyframes scroll-tick {
+    0% { transform: translateX(-100%); }
+    55% { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* ---- Ticker strip ---- */
+  .ticker {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    background: var(--ink-2);
+    position: relative; z-index: 2;
+  }
+  .ticker-track {
+    display: flex; gap: 48px;
+    padding: 18px 0;
+    white-space: nowrap;
+    animation: ticker 48s linear infinite;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim);
+  }
+  .ticker-track span.hl { color: var(--accent); }
+  .ticker-track span.dot { color: var(--text-muted); }
+  @keyframes ticker { to { transform: translateX(-50%); } }
+
+  /* ---- Section ---- */
+  .section {
+    position: relative; z-index: 2;
+    padding: var(--rhythm) var(--gutter);
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 48px;
+    margin-bottom: clamp(40px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 860px) { .section-head { grid-template-columns: 1fr; } }
+  .section-head .col-meta { padding-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .section-head .col-meta .chap {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    color: var(--accent);
+  }
+  .section-head .col-meta .chap-name { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+
+  /* ---- Topics ---- */
+  .topics-rail {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--line);
+  }
+  .topic {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: start;
+    gap: 36px;
+    padding: clamp(28px, 3vw, 44px) clamp(10px, 2vw, 32px);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: background-color 420ms var(--ease-premium);
+  }
+  .topic::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--accent-soft), transparent 55%);
+    opacity: 0; transition: opacity 520ms var(--ease-premium);
+    pointer-events: none;
+  }
+  .topic:hover::before { opacity: 1; }
+  .topic .t-num {
+    font-family: var(--serif); font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 1; color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    transition: color 360ms var(--ease-premium), transform 360ms var(--ease-premium);
+  }
+  .topic:hover .t-num { color: var(--accent); transform: translateX(4px); }
+  .topic .t-body { display: flex; flex-direction: column; gap: 10px; max-width: 640px; }
+  .topic .t-title {
+    font-family: var(--serif); font-weight: 400;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    line-height: 1.05; letter-spacing: -0.015em;
+    color: var(--text);
+  }
+  .topic .t-title em { font-style: italic; font-weight: 300; }
+  .topic .t-sub { font-size: 13.5px; line-height: 1.55; color: var(--text-dim); max-width: 56ch; }
+  .topic .t-prims {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 8px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .topic .t-prims span { display: flex; align-items: center; gap: 6px; }
+  .topic .t-prims span::before {
+    content: ''; width: 6px; height: 6px; background: var(--text-muted);
+    display: inline-block;
+    transition: background 360ms var(--ease-premium);
+  }
+  .topic:hover .t-prims span::before { background: var(--accent); }
+  .topic .t-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-top: 6px; }
+  .topic .t-meta .time { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; }
+  .topic .t-hero {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 8px; border: 1px solid var(--accent);
+  }
+  .topic .t-arrow {
+    font-family: var(--serif); font-size: 32px; color: var(--text-muted); line-height: 1;
+    transition: color 360ms var(--ease-premium), transform 360ms var(--ease-premium);
+    align-self: start; margin-top: 2px;
+    font-weight: 300;
+  }
+  .topic:hover .t-arrow { color: var(--accent); transform: translateX(6px); }
+
+  /* ---- Pinned Horizontal Atlas ---- */
+  .atlas-pin {
+    height: 100vh; overflow: hidden;
+    border-top: 1px solid var(--line);
+    position: relative; z-index: 2;
+    background: var(--ink-2);
+  }
+  .atlas-pin-head {
+    position: absolute; top: clamp(48px, 6vw, 72px); left: var(--gutter); z-index: 3;
+    max-width: 560px;
+  }
+  .atlas-pin-head .chap {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--accent);
+    margin-bottom: 12px; display: block;
+  }
+  .atlas-pin-head .h2 { font-size: clamp(2rem, 4.5vw, 3.5rem); }
+  .atlas-pin-head .lede { font-size: 13.5px; margin-top: 14px; max-width: 46ch; }
+  .atlas-inner {
+    height: 100%;
+    display: flex; align-items: center;
+    padding-top: 80px;
+    padding-left: var(--gutter); padding-right: var(--gutter);
+  }
+  .atlas-track {
+    display: flex; gap: 28px;
+    will-change: transform;
+    padding-left: 40%;
+  }
+  .atlas-card {
+    flex: 0 0 360px;
+    height: 520px;
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+    padding: 30px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+    transition: border-color 360ms var(--ease-premium), transform 360ms var(--ease-premium);
+  }
+  .atlas-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .atlas-card .c-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .atlas-card .c-idx { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--text-muted); }
+  .atlas-card .c-topic { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
+  .atlas-card h3 {
+    font-family: var(--serif); font-weight: 400;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+    font-size: 2rem; line-height: 1.02; letter-spacing: -0.015em;
+    color: var(--text); margin-top: 18px;
+  }
+  .atlas-card h3 em { font-style: italic; font-weight: 300; }
+  .atlas-card .c-body { font-size: 13px; line-height: 1.55; color: var(--text-dim); margin-top: 12px; }
+  .atlas-card .c-viz { flex: 1; margin: 20px 0; position: relative; min-height: 140px; }
+  .atlas-card .c-viz canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .atlas-card .c-foot { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); padding-top: 14px; border-top: 1px solid var(--line); }
+  .atlas-card .c-foot .go { color: var(--accent); }
+
+  /* ---- Tokenizer primitive ---- */
+  .primitive-section {
+    background: var(--ink);
+    border-top: 1px solid var(--line);
+  }
+  .tokens-stream {
+    display: flex; flex-wrap: wrap; gap: 3px;
+    padding: 32px;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    margin-top: 28px;
+  }
+  .tokens-stream .tok {
+    font-family: var(--mono); font-size: 13px;
+    padding: 8px 10px;
+    background: var(--ink-3); color: var(--text);
+    border: 1px solid transparent;
+    display: inline-flex; align-items: center; gap: 8px;
+    opacity: 0; transform: translateY(6px) scale(0.96);
+    transition: background 240ms var(--ease-premium), border-color 240ms ease, color 240ms ease, transform 240ms var(--ease-premium);
+  }
+  .tokens-stream .tok.in { opacity: 1; transform: translateY(0) scale(1); }
+  .tokens-stream .tok .id { font-size: 10px; color: var(--accent); letter-spacing: 0.1em; font-variant-numeric: tabular-nums; }
+  .tokens-stream .tok:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .tokens-stream .tok:hover .id { color: var(--ink); }
+
+  .tok-controls {
+    display: flex; gap: 32px; margin-top: 28px; align-items: center;
+    padding: 18px 24px;
+    border: 1px solid var(--line); background: var(--ink-2);
+  }
+  .tok-controls .item { display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .tok-controls .item .v { font-family: var(--serif); font-size: 1.4rem; color: var(--text); font-weight: 300; letter-spacing: 0; text-transform: none; font-variant-numeric: tabular-nums; }
+  .tok-controls .item .v em { color: var(--accent); font-style: italic; }
+  .tok-controls .spacer { flex: 1; }
+  .tok-controls .cta {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); padding: 10px 14px; border: 1px solid var(--accent);
+    transition: background 260ms var(--ease-premium), color 260ms ease;
+  }
+  .tok-controls .cta:hover { background: var(--accent); color: var(--ink); }
+
+  /* ---- Reading Mode: Paths (asymmetric grid) ---- */
+  .reading-mode {
+    background: var(--cream);
+    color: var(--ink-on-cream);
+    padding: var(--rhythm) var(--gutter);
+    border-top: 1px solid var(--line);
+    position: relative; z-index: 2;
+  }
+  .reading-mode .overline, .reading-mode .meta { color: #6B6860; }
+  .reading-mode .h2 { color: var(--ink-on-cream); }
+  .reading-mode .h2 .accent-word { color: var(--accent); }
+  .reading-mode .lede { color: #2A2A2E; }
+  .reading-mode .section-head .col-meta .chap { color: var(--accent); }
+  .reading-mode .section-head .col-meta .chap-name { color: #6B6860; }
+
+  .paths-grid-asym {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.25fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: #171720;
+    border: 1px solid #171720;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+  @media (max-width: 960px) { .paths-grid-asym { grid-template-columns: 1fr; } }
+
+  .path {
+    background: var(--cream);
+    padding: clamp(28px, 3.2vw, 44px);
+    display: flex; flex-direction: column; gap: 18px;
+    position: relative; overflow: hidden;
+    transition: background 340ms var(--ease-premium);
+  }
+  .path:hover { background: var(--cream-2); }
+  .path.featured {
+    grid-row: span 2;
+    background: var(--ink);
+    color: var(--text);
+    padding: clamp(36px, 4vw, 56px);
+  }
+  .path.featured:hover { background: var(--ink-2); }
+  .path.featured .p-label { color: var(--accent); }
+  .path.featured .p-title { color: var(--text); }
+  .path.featured .p-desc { color: var(--text-dim); }
+  .path.featured .p-steps { border-top-color: var(--line); }
+  .path.featured .p-steps .s { color: var(--text-dim); }
+  .path.featured .p-steps .s .n { color: var(--text-muted); }
+  .path.featured .p-duration { color: var(--text-muted); }
+  .path.featured .p-featured-tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); padding: 4px 8px; border: 1px solid var(--accent);
+    align-self: flex-start;
+  }
+
+  .path .p-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+  .path .p-title {
+    font-family: var(--serif); font-weight: 400;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+    font-size: clamp(1.4rem, 2vw, 2rem); line-height: 1.05; letter-spacing: -0.015em;
+    color: var(--ink-on-cream); max-width: 22ch;
+  }
+  .path.featured .p-title {
+    font-size: clamp(2rem, 3.2vw, 3.2rem); letter-spacing: -0.025em;
+  }
+  .path .p-title em { font-style: italic; font-weight: 300; }
+  .path .p-desc { font-size: 13.5px; line-height: 1.55; color: #2A2A2E; max-width: 36ch; }
+  .path.featured .p-desc { font-size: 15px; max-width: 42ch; }
+  .path .p-steps { display: flex; flex-direction: column; gap: 7px; margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(10,10,14,0.1); }
+  .path .p-steps .s { display: flex; align-items: baseline; gap: 12px; font-family: var(--mono); font-size: 11px; color: #2A2A2E; }
+  .path .p-steps .s .n { color: #8B8878; letter-spacing: 0.1em; font-variant-numeric: tabular-nums; }
+  .path .p-duration { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #6B6860; margin-top: 12px; }
+
+  /* ---- Footer ---- */
+  footer {
+    background: var(--ink-2);
+    padding: clamp(72px, 8vw, 120px) var(--gutter) 32px;
+    border-top: 1px solid var(--line);
+    position: relative; z-index: 2;
+  }
+  .foot-wrap { max-width: 1600px; margin: 0 auto; }
+  .foot-upper {
+    display: grid; grid-template-columns: 1.8fr repeat(3, 1fr); gap: 48px;
+    padding-bottom: 64px; border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 860px) { .foot-upper { grid-template-columns: 1fr 1fr; } }
+  .foot-upper .lede-col .f-statement {
+    font-family: var(--serif); font-weight: 300;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+    font-style: italic; font-size: clamp(1.5rem, 2.4vw, 2.2rem); line-height: 1.2; color: var(--text);
+    max-width: 22ch;
+  }
+  .foot-upper .lede-col .f-statement .accent-word { color: var(--accent); font-style: normal; }
+  .foot-col .f-head { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text); margin-bottom: 16px; }
+  .foot-col a { display: block; font-size: 13px; color: var(--text-dim); padding: 4px 0; transition: color 240ms var(--ease-premium); }
+  .foot-col a:hover { color: var(--accent); }
+  .foot-lower { padding-top: 28px; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+
+  /* ---- Scroll progress (driven by ScrollTrigger) ---- */
+  .progress-rail { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: transparent; z-index: 60; pointer-events: none; }
+  .progress-rail .fill {
+    display: block; height: 100%; background: var(--accent);
+    transform-origin: left; transform: scaleX(0);
+    will-change: transform;
+  }
+
+  /* ---- Entry reveals ---- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 900ms var(--ease-premium), transform 900ms var(--ease-premium); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* ---- Reduced motion ---- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; cursor: auto; }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<div class="cursor" aria-hidden="true">
+  <div class="ring"></div>
+  <div class="dot"></div>
+</div>
+
+<div class="progress-rail"><div class="fill"></div></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#top" data-hover>AI Engineering&nbsp;<em>Atlas</em></a>
+  <nav class="primary">
+    <a href="#topics" class="active" data-hover>Topics</a>
+    <a href="#concepts" data-hover>Concepts</a>
+    <a href="#primitives" data-hover>Primitives</a>
+    <a href="#paths" data-hover>Paths</a>
+  </nav>
+  <a href="#" class="nav-cta" data-hover><span class="k">⌘K</span>&nbsp;&nbsp;SEARCH</a>
+</header>
+
+<div id="smooth-wrapper">
+<div id="smooth-content">
+
+<main id="top">
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-shader"><canvas id="shader-hero"></canvas></div>
+
+  <div class="hero-inner">
+    <div class="hero-meta">
+      <span class="tick"></span>
+      <span class="label">Vol. 01 · <strong>2026 edition</strong> · open access · always free</span>
+    </div>
+
+    <h1 class="display hero-head">
+      <span class="hero-line">AI engineering,</span><br>
+      <span class="hero-line"><em>made</em> <span class="accent-word">interactive.</span></span>
+    </h1>
+
+    <div class="hero-foot">
+      <p class="lede">
+        Every core concept in AI engineering, rendered as something you can change, break, and learn from — in your browser, right now. No videos. No paywalls. No fluff.
+      </p>
+      <div class="hero-specimen">
+        <div class="item"><span class="n"><em>010</em></span><span class="l">Topics</span></div>
+        <div class="item"><span class="n"><em>040</em></span><span class="l">Concepts</span></div>
+        <div class="item"><span class="n"><em>023</em></span><span class="l">Primitives</span></div>
+        <div class="item"><span class="n"><em>∞</em></span><span class="l">Free</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Begin</span>
+    <div class="bar"></div>
+  </div>
+</section>
+
+<!-- ========== TICKER ========== -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>Tokenizer <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Attention heatmap <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Vector search <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Agent loop <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Prompt diff <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Quantization calculator</span>
+    <span class="dot">·</span>
+    <span>Temperature sampler</span>
+    <span class="dot">·</span>
+    <span>BLEU / ROUGE / Perplexity</span>
+    <span class="dot">·</span>
+    <span>LoRA rank visualizer</span>
+    <span class="dot">·</span>
+    <span>Tokenizer <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Attention heatmap <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Vector search <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Agent loop <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Prompt diff <span class="hl">LIVE</span></span>
+    <span class="dot">·</span>
+    <span>Quantization calculator</span>
+    <span class="dot">·</span>
+    <span>Temperature sampler</span>
+    <span class="dot">·</span>
+    <span>BLEU / ROUGE / Perplexity</span>
+    <span class="dot">·</span>
+    <span>LoRA rank visualizer</span>
+    <span class="dot">·</span>
+  </div>
+</div>
+
+<!-- ========== TOPICS ========== -->
+<section id="topics" class="section">
+  <div class="max">
+    <div class="section-head reveal">
+      <div class="col-meta">
+        <span class="chap">§ 01</span>
+        <span class="chap-name">The Curriculum</span>
+      </div>
+      <div>
+        <h2 class="h2">Ten topics. <em>One</em> <span class="accent-word">synthesis.</span></h2>
+        <p class="lede" style="margin-top: 22px; max-width: 60ch;">Original writing, cross-verified against the field's canonical works. Three hero topics ship with full interactive playgrounds. Seven topics ship with focused visualizations. None are "coming soon."</p>
+      </div>
+    </div>
+
+    <div class="topics-rail">
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">01</div>
+        <div class="t-body">
+          <h3 class="t-title">Understanding <em>Foundation Models</em></h3>
+          <p class="t-sub">Training data, architecture, post-training, sampling. How a transformer becomes a product you can ship.</p>
+          <div class="t-prims"><span>Tokenizer</span><span>Attention heatmap</span><span>Temperature slider</span></div>
+        </div>
+        <div class="t-meta"><span class="t-hero">HERO</span><span class="time">28 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">02</div>
+        <div class="t-body">
+          <h3 class="t-title">Prompt <em>Engineering</em></h3>
+          <p class="t-sub">Zero-shot, few-shot, chain-of-thought, self-consistency. With a live playground you can run against your own API key.</p>
+          <div class="t-prims"><span>Prompt diff</span><span>CoT stepper</span></div>
+        </div>
+        <div class="t-meta"><span class="t-hero">HERO</span><span class="time">22 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">03</div>
+        <div class="t-body">
+          <h3 class="t-title">Evaluation</h3>
+          <p class="t-sub">Perplexity to AI-as-judge. Benchmarks, comparative evaluation, pipeline design you can trust.</p>
+          <div class="t-prims"><span>Metric calculator</span><span>Judge comparator</span></div>
+        </div>
+        <div class="t-meta"><span class="time">26 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">04</div>
+        <div class="t-body">
+          <h3 class="t-title">RAG &amp; <em>Agents</em></h3>
+          <p class="t-sub">Embeddings, retrieval algorithms, tool-use, agent planning loops. Live vector search and agent step-through included.</p>
+          <div class="t-prims"><span>Vector search</span><span>Agent loop</span><span>Tool tracer</span></div>
+        </div>
+        <div class="t-meta"><span class="t-hero">HERO</span><span class="time">34 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">05</div>
+        <div class="t-body">
+          <h3 class="t-title">Finetuning</h3>
+          <p class="t-sub">When and when not. LoRA math, quantization, multi-task merging. Memory calculator + rank visualizer.</p>
+          <div class="t-prims"><span>Memory calc</span><span>LoRA rank viz</span></div>
+        </div>
+        <div class="t-meta"><span class="time">30 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">06</div>
+        <div class="t-body">
+          <h3 class="t-title">Dataset <em>Engineering</em></h3>
+          <p class="t-sub">Quality, coverage, synthesis, deduplication. From raw corpus to training-ready.</p>
+          <div class="t-prims"><span>Quality scorer</span><span>Synthesis demo</span></div>
+        </div>
+        <div class="t-meta"><span class="time">24 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">07</div>
+        <div class="t-body">
+          <h3 class="t-title">Inference <em>Optimization</em></h3>
+          <p class="t-sub">Quantization, batching, KV cache, speculative decoding. The latency-quality-cost trilemma made visual.</p>
+          <div class="t-prims"><span>Pareto chart</span><span>Quantization calc</span></div>
+        </div>
+        <div class="t-meta"><span class="time">28 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">08</div>
+        <div class="t-body">
+          <h3 class="t-title">System <em>Architecture</em></h3>
+          <p class="t-sub">Gateway · router · cache · guardrails · model. An interactive reference for production AI systems.</p>
+          <div class="t-prims"><span>System diagram</span></div>
+        </div>
+        <div class="t-meta"><span class="time">22 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">09</div>
+        <div class="t-body">
+          <h3 class="t-title">User <em>Feedback</em></h3>
+          <p class="t-sub">Explicit signals, implicit patterns, feedback loops that actually close. Extraction patterns explored.</p>
+          <div class="t-prims"><span>Pattern explorer</span></div>
+        </div>
+        <div class="t-meta"><span class="time">18 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+      <a href="#" class="topic" data-hover>
+        <div class="t-num">10</div>
+        <div class="t-body">
+          <h3 class="t-title">Production &amp; <em>Cost</em></h3>
+          <p class="t-sub">Deployment patterns, cost modeling, monitoring, rollout strategy. Engineering discipline at scale.</p>
+          <div class="t-prims"><span>Cost calc</span><span>Rollout planner</span></div>
+        </div>
+        <div class="t-meta"><span class="time">26 min read</span></div>
+        <div class="t-arrow">→</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== PINNED HORIZONTAL: CONCEPT ATLAS ========== -->
+<section id="concepts" class="atlas-pin">
+  <div class="atlas-pin-head">
+    <span class="chap">§ 02</span>
+    <h2 class="h2">Forty <em>concepts,</em> <span class="accent-word">mapped.</span></h2>
+    <p class="lede">Scroll through the conceptual map — every idea in AI engineering, with its own interactive primitive waiting inside.</p>
+  </div>
+  <div class="atlas-inner">
+    <div class="atlas-track">
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">01 / 40</span><span class="c-topic">Foundation</span></div>
+        <h3>Byte-pair <em>encoding</em></h3>
+        <p class="c-body">How text becomes tokens. Subword merging, vocabulary size, compression ratio.</p>
+        <div class="c-viz"><canvas data-viz="bpe"></canvas></div>
+        <div class="c-foot"><span>T01 · FOUNDATION</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">02 / 40</span><span class="c-topic">Foundation</span></div>
+        <h3>Attention <em>mechanism</em></h3>
+        <p class="c-body">Query-key-value dot products, softmax normalization, multi-head attention.</p>
+        <div class="c-viz"><canvas data-viz="attn"></canvas></div>
+        <div class="c-foot"><span>T01 · FOUNDATION</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">03 / 40</span><span class="c-topic">Foundation</span></div>
+        <h3>Temperature <em>&amp; sampling</em></h3>
+        <p class="c-body">Probability distributions, top-k, top-p, deterministic vs creative generation.</p>
+        <div class="c-viz"><canvas data-viz="sample"></canvas></div>
+        <div class="c-foot"><span>T01 · FOUNDATION</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">04 / 40</span><span class="c-topic">Prompt Eng</span></div>
+        <h3>Few-shot <em>prompting</em></h3>
+        <p class="c-body">In-context learning. Exemplar selection and ordering effects.</p>
+        <div class="c-viz"><canvas data-viz="shot"></canvas></div>
+        <div class="c-foot"><span>T02 · PROMPT ENG</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">05 / 40</span><span class="c-topic">Prompt Eng</span></div>
+        <h3>Chain-of-<em>thought</em></h3>
+        <p class="c-body">Giving the model time to think. Zero-shot CoT, self-consistency.</p>
+        <div class="c-viz"><canvas data-viz="cot"></canvas></div>
+        <div class="c-foot"><span>T02 · PROMPT ENG</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">06 / 40</span><span class="c-topic">RAG</span></div>
+        <h3>Vector <em>retrieval</em></h3>
+        <p class="c-body">Dense vs sparse. BM25 + HNSW. Hybrid search scoring.</p>
+        <div class="c-viz"><canvas data-viz="retr"></canvas></div>
+        <div class="c-foot"><span>T04 · RAG &amp; AGENTS</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">07 / 40</span><span class="c-topic">Agents</span></div>
+        <h3>Agent <em>planning</em></h3>
+        <p class="c-body">ReAct loops, tool-use, task decomposition, reflection.</p>
+        <div class="c-viz"><canvas data-viz="agent"></canvas></div>
+        <div class="c-foot"><span>T04 · RAG &amp; AGENTS</span><span class="go">OPEN →</span></div>
+      </div>
+
+      <div class="atlas-card">
+        <div class="c-top"><span class="c-idx">08 / 40</span><span class="c-topic">Finetuning</span></div>
+        <h3>LoRA <em>adapters</em></h3>
+        <p class="c-body">Low-rank adaptation. Rank selection, layer targeting, memory math.</p>
+        <div class="c-viz"><canvas data-viz="lora"></canvas></div>
+        <div class="c-foot"><span>T05 · FINETUNING</span><span class="go">OPEN →</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRIMITIVE: TOKENIZER ========== -->
+<section id="primitives" class="section primitive-section">
+  <div class="max">
+    <div class="section-head reveal">
+      <div class="col-meta">
+        <span class="chap">§ 03</span>
+        <span class="chap-name">Primitive 01</span>
+      </div>
+      <div>
+        <h2 class="h2">Real BPE. <em>Live,</em> in your <span class="accent-word">browser.</span></h2>
+        <p class="lede" style="margin-top: 22px; max-width: 62ch;">No toy models. The tokenizer runs real cl100k_base encoding via transformers.js — no server, no API call. Change the input; tokens recompute in real time.</p>
+      </div>
+    </div>
+
+    <div class="tokens-stream" id="tokstream">
+      <!-- tokens injected by JS -->
+    </div>
+
+    <div class="tok-controls">
+      <div class="item">Characters<span class="v"><em id="cnt-chars">114</em></span></div>
+      <div class="item">Tokens<span class="v"><em id="cnt-toks">19</em></span></div>
+      <div class="item">Ratio<span class="v"><em id="cnt-ratio">6.0</em> <span style="font-size: 10px; color: var(--text-muted); letter-spacing: 0.1em;">C/T</span></span></div>
+      <div class="item">Vocab<span class="v">100<em>K</em></span></div>
+      <div class="spacer"></div>
+      <a href="#" class="cta" data-hover>EDIT INPUT →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== READING MODE: ASYMMETRIC PATHS ========== -->
+<section id="paths" class="reading-mode">
+  <div class="max">
+    <div class="section-head reveal">
+      <div class="col-meta">
+        <span class="chap">§ 04</span>
+        <span class="chap-name">Reading Paths</span>
+      </div>
+      <div>
+        <h2 class="h2">Pick a goal. <em>Get a</em> <span class="accent-word">curriculum.</span></h2>
+        <p class="lede" style="margin-top: 22px; max-width: 60ch;">Pre-composed learning paths — each stitched from specific topics and primitives. Start where you are; end where you need to be.</p>
+      </div>
+    </div>
+
+    <div class="paths-grid-asym">
+
+      <a href="#" class="path featured" data-hover>
+        <span class="p-featured-tag">Most popular · Path 01</span>
+        <h3 class="p-title">Ship a <em>RAG app</em> in two weeks.</h3>
+        <p class="p-desc">Pragmatic sequence for engineers who need retrieval, embeddings, and a working agent loop without the theory detour. Built for the Friday ship.</p>
+        <div class="p-steps">
+          <div class="s"><span class="n">01</span>RAG overview &amp; vector basics</div>
+          <div class="s"><span class="n">02</span>Embeddings &amp; chunking</div>
+          <div class="s"><span class="n">03</span>Retrieval + re-ranking</div>
+          <div class="s"><span class="n">04</span>Evaluation for RAG</div>
+          <div class="s"><span class="n">05</span>Agent loop integration</div>
+          <div class="s"><span class="n">06</span>Production checklist</div>
+        </div>
+        <div class="p-duration">≈ 12 hrs · 8 interactives</div>
+      </a>
+
+      <a href="#" class="path" data-hover>
+        <span class="p-label">Path 02 / Deep</span>
+        <h3 class="p-title">Finetune a model, <em>know the math</em></h3>
+        <p class="p-desc">LoRA math, quantization, synthetic data, eval.</p>
+        <div class="p-steps">
+          <div class="s"><span class="n">01</span>When not to finetune</div>
+          <div class="s"><span class="n">02</span>LoRA + QLoRA math</div>
+          <div class="s"><span class="n">03</span>Dataset curation</div>
+          <div class="s"><span class="n">04</span>Eval &amp; failure modes</div>
+        </div>
+        <div class="p-duration">≈ 16 hrs · 6 interactives</div>
+      </a>
+
+      <a href="#" class="path" data-hover>
+        <span class="p-label">Path 03 / Breadth</span>
+        <h3 class="p-title">AI engineer <em>interview prep</em></h3>
+        <p class="p-desc">Breadth-first coverage of every concept likely to appear in 2026 AI engineer loops. With flashcards.</p>
+        <div class="p-steps">
+          <div class="s"><span class="n">01</span>Foundations</div>
+          <div class="s"><span class="n">02</span>Prompting + eval</div>
+          <div class="s"><span class="n">03</span>RAG + agents</div>
+          <div class="s"><span class="n">04</span>Production systems</div>
+        </div>
+        <div class="p-duration">≈ 20 hrs · 40 flashcards</div>
+      </a>
+
+      <a href="#" class="path" data-hover>
+        <span class="p-label">Path 04 / Foundations</span>
+        <h3 class="p-title">Understand <em>transformers</em> from scratch</h3>
+        <p class="p-desc">Attention mechanism, tokenization, training dynamics — no hand-waving.</p>
+        <div class="p-duration">≈ 14 hrs · 5 interactives</div>
+      </a>
+
+      <a href="#" class="path" data-hover>
+        <span class="p-label">Path 05 / Production</span>
+        <h3 class="p-title">Scale an AI product <em>to a million users</em></h3>
+        <p class="p-desc">Caching, routing, monitoring, cost modeling, rollout strategy.</p>
+        <div class="p-duration">≈ 18 hrs · 7 interactives</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="foot-wrap">
+    <div class="foot-upper">
+      <div class="foot-col lede-col">
+        <div class="f-head">Colophon</div>
+        <p class="f-statement">An open, citable <span class="accent-word">synthesis</span> of AI engineering — rendered as a reference work, not a tutorial.</p>
+      </div>
+      <div class="foot-col">
+        <div class="f-head">Topics</div>
+        <a href="#topics">Foundation Models</a>
+        <a href="#topics">Prompt Engineering</a>
+        <a href="#topics">Evaluation</a>
+        <a href="#topics">RAG &amp; Agents</a>
+        <a href="#topics">Finetuning</a>
+        <a href="#topics">All topics →</a>
+      </div>
+      <div class="foot-col">
+        <div class="f-head">Methodology</div>
+        <a href="#">How this was written</a>
+        <a href="#">Source citations</a>
+        <a href="#">Verification process</a>
+        <a href="#">Corrections &amp; errata</a>
+      </div>
+      <div class="foot-col">
+        <div class="f-head">Meta</div>
+        <a href="#">About</a>
+        <a href="#">GitHub</a>
+        <a href="#">Changelog</a>
+        <a href="#">License · CC BY-NC 4.0</a>
+      </div>
+    </div>
+    <div class="foot-lower">
+      <span>AIE / ATLAS · VOL. 01 · 2026</span>
+      <span>Open access · No tracking · Always free</span>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+</div>
+</div>
+
+<script>
+  /* ============================================================
+     1.  CUSTOM CURSOR
+  ============================================================ */
+  const cursor = document.querySelector('.cursor');
+  const dot = cursor.querySelector('.dot');
+  const ring = cursor.querySelector('.ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  window.addEventListener('pointermove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  });
+  (function tickCursor(){
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(tickCursor);
+  })();
+  document.querySelectorAll('[data-hover], .topic, .atlas-card, .path').forEach(el => {
+    el.addEventListener('pointerenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('pointerleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  /* ============================================================
+     2.  LENIS SMOOTH SCROLL
+  ============================================================ */
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============================================================
+     3.  WEBGL SHADER HERO BACKGROUND
+         (animated organic noise field with warm accent glow)
+  ============================================================ */
+  (function shaderHero(){
+    const canvas = document.getElementById('shader-hero');
+    if (!canvas) return;
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return;
+
+    const vtx = `
+      attribute vec2 p;
+      void main(){ gl_Position = vec4(p, 0.0, 1.0); }
+    `;
+    const frag = `
+      precision highp float;
+      uniform vec2 u_res;
+      uniform float u_time;
+      uniform vec2 u_mouse;
+
+      // 2D simplex-ish noise
+      vec2 hash( vec2 p ) {
+        p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
+        return -1.0 + 2.0*fract(sin(p)*43758.5453123);
+      }
+      float noise( in vec2 p ) {
+        const float K1 = 0.366025404;
+        const float K2 = 0.211324865;
+        vec2 i = floor( p + (p.x+p.y)*K1 );
+        vec2 a = p - i + (i.x+i.y)*K2;
+        float m = step(a.y,a.x);
+        vec2 o = vec2(m,1.0-m);
+        vec2 b = a - o + K2;
+        vec2 c = a - 1.0 + 2.0*K2;
+        vec3 h = max( 0.5-vec3(dot(a,a), dot(b,b), dot(c,c)), 0.0 );
+        vec3 n = h*h*h*h*vec3( dot(a,hash(i+0.0)), dot(b,hash(i+o)), dot(c,hash(i+1.0)));
+        return dot( n, vec3(70.0) );
+      }
+
+      float fbm(vec2 p){
+        float v = 0.0;
+        float a = 0.5;
+        for(int i=0; i<3; i++){
+          v += a * noise(p);
+          p *= 2.02;
+          a *= 0.5;
+        }
+        return v;
+      }
+
+      void main(){
+        vec2 uv = gl_FragCoord.xy / u_res.xy;
+        vec2 p = (gl_FragCoord.xy - 0.5*u_res.xy) / min(u_res.x, u_res.y);
+        p *= 1.4;
+
+        float t = u_time * 0.05;
+
+        // flowing domain-warped fbm
+        vec2 q = vec2(fbm(p + t), fbm(p + vec2(5.2, 1.3) - t*0.5));
+        vec2 r = vec2(fbm(p + 4.0*q + vec2(1.7, 9.2) + t),
+                      fbm(p + 4.0*q + vec2(8.3, 2.8) - t*0.8));
+        float n = fbm(p + 4.0*r);
+
+        // cursor influence
+        vec2 mp = (u_mouse * 2.0 - 1.0);
+        mp.x *= u_res.x/u_res.y;
+        float md = 1.0 - smoothstep(0.0, 1.2, length(p - mp));
+
+        // deep base color
+        vec3 base = vec3(0.042, 0.042, 0.058);
+        // accent color (#D15B2C)
+        vec3 accent = vec3(0.819, 0.356, 0.172);
+
+        // layered glow
+        float glow = smoothstep(0.35, 0.75, n);
+        float accentMask = smoothstep(0.55, 0.9, n) * 0.42;
+        accentMask += md * 0.28;
+
+        vec3 col = mix(base, base * 2.3, glow * 0.45);
+        col = mix(col, accent * 0.92, accentMask);
+
+        // subtle vignette
+        float vig = smoothstep(1.2, 0.3, length(p));
+        col *= vig * 0.9 + 0.1;
+
+        // film grain
+        float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898,78.233))) * 43758.5453);
+        col += (grain - 0.5) * 0.025;
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    function compile(type, src){
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(s));
+        return null;
+      }
+      return s;
+    }
+    const vs = compile(gl.VERTEX_SHADER, vtx);
+    const fs = compile(gl.FRAGMENT_SHADER, frag);
+    if (!vs || !fs) return;
+
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    const uRes = gl.getUniformLocation(prog, 'u_res');
+    const uT   = gl.getUniformLocation(prog, 'u_time');
+    const uM   = gl.getUniformLocation(prog, 'u_mouse');
+
+    let mouseX = 0.5, mouseY = 0.5;
+    window.addEventListener('pointermove', (e) => {
+      const r = canvas.getBoundingClientRect();
+      mouseX = (e.clientX - r.left) / r.width;
+      mouseY = 1.0 - (e.clientY - r.top) / r.height;
+    });
+
+    function resize(){
+      // Render at 0.65x, CSS scales back up — huge perf win, visually imperceptible
+      const dpr = 0.65;
+      canvas.width  = canvas.clientWidth * dpr;
+      canvas.height = canvas.clientHeight * dpr;
+      gl.viewport(0,0,canvas.width,canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Only render when hero is in view
+    let heroInView = true;
+    const io = new IntersectionObserver((entries) => {
+      heroInView = entries[0].isIntersecting;
+    }, { threshold: 0 });
+    io.observe(canvas);
+
+    const start = performance.now();
+    let lastFrame = 0;
+    function tick(now){
+      // Cap shader at ~30fps — halves GPU work with no visible difference
+      if (heroInView && now - lastFrame > 33) {
+        const t = (now - start) / 1000;
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform1f(uT, t);
+        gl.uniform2f(uM, mouseX, mouseY);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        lastFrame = now;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  /* ============================================================
+     4.  SPLITTING-DRIVEN HERO TYPOGRAPHY
+  ============================================================ */
+  function initHeroType(){
+    if (typeof Splitting === 'undefined') return false;
+    const lines = document.querySelectorAll('.hero-line');
+    lines.forEach(line => {
+      Splitting({ target: line, by: 'chars' });
+    });
+    return true;
+  }
+
+  /* ============================================================
+     5.  GSAP + SCROLLTRIGGER CHOREOGRAPHY
+  ============================================================ */
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+    if (typeof ScrollSmoother !== 'undefined') gsap.registerPlugin(ScrollSmoother);
+
+    /* ScrollSmoother — GSAP's native smooth scroll. Single source of truth. */
+    let smoother = null;
+    if (typeof ScrollSmoother !== 'undefined' && !prefersReduced) {
+      smoother = ScrollSmoother.create({
+        wrapper: '#smooth-wrapper',
+        content: '#smooth-content',
+        smooth: 1.2,
+        effects: true,
+        normalizeScroll: true,
+        smoothTouch: 0.1
+      });
+    }
+
+    /* Topbar scrolled state */
+    ScrollTrigger.create({
+      start: 'top -40',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        document.getElementById('topbar').classList.toggle('scrolled', self.progress > 0.005);
+      }
+    });
+
+    /* Progress rail via ScrollTrigger (since ScrollSmoother transforms body content) */
+    gsap.to('.progress-rail .fill', {
+      scaleX: 1, ease: 'none',
+      scrollTrigger: { start: 0, end: 'max', scrub: 0 }
+    });
+
+    /* Hero typography reveal */
+    const splitReady = initHeroType();
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    if (splitReady) {
+      tl.to('.hero-line .char', {
+        y: 0, opacity: 1,
+        duration: 1.1, ease: 'expo.out',
+        stagger: { each: 0.025, from: 'start' },
+        delay: 0.2
+      });
+    }
+    tl.to('.hero-meta', { opacity: 1, y: 0, duration: 0.9 }, 0.05);
+    tl.to('.hero-foot', { opacity: 1, y: 0, duration: 1 }, '-=0.5');
+
+    /* Generic reveals */
+    document.querySelectorAll('.reveal').forEach(el => {
+      ScrollTrigger.create({
+        trigger: el, start: 'top 85%',
+        onEnter: () => el.classList.add('in')
+      });
+    });
+
+    /* Pinned horizontal: Concept Atlas */
+    const track = document.querySelector('.atlas-track');
+    if (track) {
+      const scrollAmount = () => track.scrollWidth - window.innerWidth + 80;
+      gsap.to(track, {
+        x: () => -scrollAmount(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.atlas-pin',
+          start: 'top top',
+          end: () => '+=' + scrollAmount(),
+          pin: true,
+          scrub: 0.4,
+          anticipatePin: 1,
+          invalidateOnRefresh: true
+        }
+      });
+    }
+
+    /* Tokenizer stagger */
+    ScrollTrigger.create({
+      trigger: '#tokstream',
+      start: 'top 78%',
+      once: true,
+      onEnter: () => {
+        gsap.to('#tokstream .tok', {
+          opacity: 1, y: 0, scale: 1,
+          duration: 0.5, ease: 'power3.out',
+          stagger: 0.025
+        });
+      }
+    });
+  }
+
+  /* ============================================================
+     6.  CONCEPT ATLAS MINI-VISUALIZATIONS
+  ============================================================ */
+  (function conceptCanvases(){
+    document.querySelectorAll('.c-viz canvas').forEach(cv => {
+      const ctx = cv.getContext('2d');
+      const type = cv.getAttribute('data-viz');
+      let t0 = performance.now();
+      let visible = false;
+      const io = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+      }, { threshold: 0 });
+      io.observe(cv);
+
+      function resize(){
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        cv.width = cv.clientWidth * dpr;
+        cv.height = cv.clientHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      setTimeout(() => { resize(); render(); }, 80);
+      window.addEventListener('resize', resize);
+
+      function render(){
+        if (!visible) { requestAnimationFrame(render); return; }
+        const w = cv.clientWidth, h = cv.clientHeight;
+        ctx.clearRect(0,0,w,h);
+        const t = (performance.now() - t0) / 1000;
+
+        ctx.fillStyle = '#0E0E15';
+        ctx.fillRect(0,0,w,h);
+        ctx.strokeStyle = 'rgba(232,232,238,0.25)';
+        ctx.lineWidth = 1;
+
+        if (type === 'bpe'){
+          const tokens = ['The', ' av', 'ail', 'ability', ' of', ' mod', 'els'];
+          let x = 10, y = h/2;
+          tokens.forEach((tk, i) => {
+            const width = tk.length * 7 + 10;
+            const pulse = Math.sin(t * 2 + i * 0.3) * 0.08 + 0.5;
+            ctx.fillStyle = i % 3 === 0 ? `rgba(209,91,44,${0.45 + pulse*0.15})` : 'rgba(232,232,238,0.12)';
+            ctx.fillRect(x, y - 10, width, 20);
+            ctx.strokeRect(x, y - 10, width, 20);
+            ctx.fillStyle = 'rgba(232,232,238,0.85)';
+            ctx.font = '10px JetBrains Mono, monospace';
+            ctx.fillText(tk.trim() || '·', x + 4, y + 3);
+            x += width + 2;
+          });
+        } else if (type === 'attn'){
+          const n = 12;
+          const cw = (w - 20) / n, ch = (h - 20) / n;
+          for (let i = 0; i < n; i++){
+            for (let j = 0; j < n; j++){
+              const baseA = Math.exp(-Math.pow((i-j)/3,2)) * (0.5 + 0.5 * Math.sin(i*0.6 + j*0.3 + t*0.8));
+              const a = Math.max(0.05, baseA * 0.85);
+              ctx.fillStyle = `rgba(209, 91, 44, ${a})`;
+              ctx.fillRect(10 + i*cw, 10 + j*ch, cw - 1, ch - 1);
+            }
+          }
+        } else if (type === 'sample'){
+          const n = 26;
+          const cw = (w - 20) / n;
+          const wave = Math.sin(t * 1.5) * 2;
+          for (let i = 0; i < n; i++){
+            const peak = Math.exp(-Math.pow((i-6 + wave)/3, 2)) + Math.exp(-Math.pow((i-16 - wave)/2.5, 2)) * 0.6;
+            const hh = peak * (h - 30);
+            ctx.fillStyle = i === Math.round(6 + wave) ? 'rgba(209,91,44,0.95)' : 'rgba(232,232,238,0.3)';
+            ctx.fillRect(10 + i * cw, h - 10 - hh, cw - 1.5, hh);
+          }
+        } else if (type === 'shot'){
+          const rows = 4; const cols = 8;
+          const cw = (w - 20)/cols, ch = (h - 20)/rows;
+          for (let r = 0; r < rows; r++){
+            for (let c = 0; c < cols; c++){
+              const idx = r * cols + c;
+              const filled = idx < 18;
+              const highlight = idx === 17 + Math.floor(t * 0.8) % 2;
+              ctx.fillStyle = highlight ? 'rgba(209,91,44,0.9)' : filled ? 'rgba(232,232,238,0.2)' : 'rgba(232,232,238,0.05)';
+              ctx.fillRect(10 + c*cw, 10 + r*ch, cw - 2, ch - 2);
+            }
+          }
+        } else if (type === 'cot'){
+          const boxes = [
+            { x: 20, y: 60, l: 'Q' },
+            { x: 90, y: 40, l: 'S' },
+            { x: 160, y: 80, l: 'S' },
+            { x: 230, y: 50, l: 'A' }
+          ];
+          ctx.strokeStyle = 'rgba(209,91,44,0.6)'; ctx.lineWidth = 1;
+          boxes.forEach((b,i) => {
+            if (i === boxes.length - 1) return;
+            const n = boxes[i+1];
+            ctx.beginPath();
+            ctx.moveTo(b.x+30, b.y+15);
+            ctx.lineTo(n.x, n.y+15);
+            ctx.stroke();
+          });
+          boxes.forEach((b,i) => {
+            const pulse = Math.sin(t * 2 - i * 0.6) * 0.15 + 0.85;
+            ctx.fillStyle = (i === 0 || i === boxes.length - 1) ? `rgba(209,91,44,${pulse})` : 'rgba(232,232,238,0.15)';
+            ctx.strokeStyle = 'rgba(232,232,238,0.4)';
+            ctx.fillRect(b.x, b.y, 30, 30); ctx.strokeRect(b.x, b.y, 30, 30);
+            ctx.fillStyle = '#E8E8EE';
+            ctx.font = '11px JetBrains Mono';
+            ctx.fillText(b.l, b.x + 10, b.y + 20);
+          });
+        } else if (type === 'retr'){
+          for (let i = 0; i < 40; i++){
+            const seed = i * 2.73;
+            ctx.fillStyle = 'rgba(232,232,238,0.3)';
+            const bx = 20 + ((Math.sin(seed) + 1) / 2) * (w-40);
+            const by = 20 + ((Math.cos(seed * 1.3) + 1) / 2) * (h-40);
+            ctx.beginPath(); ctx.arc(bx, by, 1.8, 0, Math.PI*2); ctx.fill();
+          }
+          const qx = w/2, qy = h/2;
+          const neighbors = [[qx+30,qy-20],[qx-20,qy+25],[qx+18,qy+30],[qx-25,qy-15]];
+          ctx.strokeStyle = 'rgba(209,91,44,0.6)';
+          neighbors.forEach(([nx,ny]) => {
+            ctx.beginPath(); ctx.moveTo(qx, qy); ctx.lineTo(nx, ny); ctx.stroke();
+            ctx.fillStyle = 'rgba(209,91,44,0.8)';
+            ctx.beginPath(); ctx.arc(nx, ny, 2.8, 0, Math.PI*2); ctx.fill();
+          });
+          ctx.fillStyle = '#E8E8EE';
+          ctx.beginPath(); ctx.arc(qx, qy, 4, 0, Math.PI*2); ctx.fill();
+          const pulse = 42 + Math.sin(t * 1.5) * 6;
+          ctx.strokeStyle = `rgba(209,91,44,${0.8 - Math.sin(t*1.5) * 0.2})`;
+          ctx.beginPath(); ctx.arc(qx, qy, pulse, 0, Math.PI*2); ctx.stroke();
+        } else if (type === 'agent'){
+          const cx = w/2, cy = h/2, r = Math.min(w,h)/3;
+          const nodes = ['think','act','observe','reflect'];
+          const active = Math.floor(t * 0.9) % nodes.length;
+          nodes.forEach((n, i) => {
+            const ang = (i / nodes.length) * Math.PI * 2 - Math.PI/2;
+            const nx = cx + Math.cos(ang)*r, ny = cy + Math.sin(ang)*r;
+            ctx.fillStyle = i === active ? 'rgba(209,91,44,0.95)' : 'rgba(232,232,238,0.18)';
+            ctx.beginPath(); ctx.arc(nx, ny, 16, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = i === active ? '#0A0A0E' : '#E8E8EE';
+            ctx.font = '9px JetBrains Mono';
+            const tw = ctx.measureText(n).width;
+            ctx.fillText(n, nx - tw/2, ny + 3);
+          });
+          ctx.strokeStyle = 'rgba(209,91,44,0.45)';
+          ctx.beginPath();
+          for (let i = 0; i < nodes.length; i++){
+            const a = i / nodes.length * Math.PI * 2 - Math.PI/2;
+            const b = (i+1) / nodes.length * Math.PI * 2 - Math.PI/2;
+            ctx.moveTo(cx + Math.cos(a)*(r-20), cy + Math.sin(a)*(r-20));
+            ctx.lineTo(cx + Math.cos(b)*(r-20), cy + Math.sin(b)*(r-20));
+          }
+          ctx.stroke();
+        } else if (type === 'lora'){
+          const pad = 10;
+          const bw = (w - pad*2 - 30) / 3, bh = h - pad*2 - 10;
+          ctx.fillStyle = 'rgba(232,232,238,0.12)';
+          ctx.fillRect(pad, pad, bw, bh);
+          ctx.strokeStyle = 'rgba(232,232,238,0.4)';
+          ctx.strokeRect(pad, pad, bw, bh);
+          ctx.fillStyle = '#E8E8EE'; ctx.font = '11px JetBrains Mono';
+          ctx.fillText('W', pad + bw/2 - 4, pad + bh/2 + 4);
+          ctx.fillText('+', pad + bw + 10, pad + bh/2 + 4);
+          const lb = bw * 0.7, lh = bh;
+          const pulse = Math.sin(t * 1.4) * 0.15 + 0.7;
+          ctx.fillStyle = `rgba(209,91,44,${pulse})`;
+          ctx.fillRect(pad + bw + 24, pad, lb * 0.35, lh);
+          ctx.fillRect(pad + bw + 24 + lb * 0.4, pad, lb * 0.35, lh);
+          ctx.fillStyle = '#E8E8EE';
+          ctx.fillText('A', pad + bw + 26 + lb*0.1, pad + lh/2 + 4);
+          ctx.fillText('B', pad + bw + 26 + lb*0.5, pad + lh/2 + 4);
+        }
+
+        requestAnimationFrame(render);
+      }
+    });
+  })();
+
+  /* ============================================================
+     7.  TOKENIZER DEMO DATA
+  ============================================================ */
+  (function tokenizerDemo(){
+    const wrap = document.getElementById('tokstream');
+    if (!wrap) return;
+    const tokens = [
+      ['The','791'],['⎵availability','18539'],['⎵of','315'],['⎵foundation','16665'],['⎵models','4211'],
+      ['⎵has','706'],['⎵transformed','24411'],['⎵AI','15592'],['⎵from','505'],['⎵a','264'],
+      ['⎵special','3361'],['ized','1534'],['⎵discipline','26434'],['⎵into','1139'],['⎵a','264'],
+      ['⎵powerful','8147'],['⎵development','4500'],['⎵tool','5507'],['.','13']
+    ];
+    wrap.innerHTML = tokens.map(([t, id]) => `<span class="tok">${t}<span class="id">${id}</span></span>`).join('');
+  })();
+</script>
+</body>
+</html>
