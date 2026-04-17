@@ -239,6 +239,8 @@ function animate() {
   rafId = requestAnimationFrame(animate)
 }
 
+let onScroll: (() => void) | null = null
+
 onMounted(() => {
   if (!container.value) return
 
@@ -265,13 +267,11 @@ onMounted(() => {
   buildNodes()
   buildEdges()
 
-  // Interaction
   renderer.domElement.addEventListener('pointermove', onPointerMove)
   renderer.domElement.addEventListener('click', onClick)
   window.addEventListener('resize', onResize)
 
-  // Scroll → modulates camera orbit
-  const onScroll = () => {
+  onScroll = () => {
     if (!container.value) return
     const rect = container.value.getBoundingClientRect()
     const viewport = window.innerHeight
@@ -279,7 +279,6 @@ onMounted(() => {
   }
   window.addEventListener('scroll', onScroll, { passive: true })
 
-  // Only render when visible
   io = new IntersectionObserver(entries => {
     const intersecting = entries[0]?.isIntersecting
     if (intersecting && !running) {
@@ -290,22 +289,28 @@ onMounted(() => {
     }
   }, { threshold: 0 })
   io.observe(container.value)
+})
 
-  onBeforeUnmount(() => {
-    running = false
-    cancelAnimationFrame(rafId)
-    io?.disconnect()
-    window.removeEventListener('resize', onResize)
-    window.removeEventListener('scroll', onScroll)
+onBeforeUnmount(() => {
+  running = false
+  cancelAnimationFrame(rafId)
+  io?.disconnect()
+  window.removeEventListener('resize', onResize)
+  if (onScroll) window.removeEventListener('scroll', onScroll)
+  if (renderer) {
     renderer.domElement.removeEventListener('pointermove', onPointerMove)
     renderer.domElement.removeEventListener('click', onClick)
     renderer.dispose()
-    if (ringMesh) { ringMesh.geometry.dispose() }
+  }
+  if (ringMesh) ringMesh.geometry.dispose()
+  if (nodeMesh) {
     nodeMesh.geometry.dispose()
     ;(nodeMesh.material as THREE.Material).dispose()
+  }
+  if (edgeSegments) {
     edgeSegments.geometry.dispose()
     ;(edgeSegments.material as THREE.Material).dispose()
-  })
+  }
 })
 </script>
 
