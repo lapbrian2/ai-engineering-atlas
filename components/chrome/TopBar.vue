@@ -28,8 +28,8 @@ onMounted(() => {
     <nav class="primary">
       <NuxtLink to="/#topics" data-hover>Topics</NuxtLink>
       <NuxtLink to="/#concepts" data-hover>Concepts</NuxtLink>
-      <NuxtLink to="/#primitives" data-hover>Primitives</NuxtLink>
       <NuxtLink to="/#paths" data-hover>Paths</NuxtLink>
+      <NuxtLink to="/books" data-hover>Sources</NuxtLink>
     </nav>
     <button class="nav-cta" data-hover data-magnet type="button" @click="openSearch">
       <span class="k">⌘K</span>&nbsp;&nbsp;SEARCH

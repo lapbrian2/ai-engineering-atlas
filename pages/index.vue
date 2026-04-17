@@ -18,15 +18,9 @@ useHead({
       </div>
     </section>
 
-    <TickerStrip />
-
-    <BooksMarquee />
-
     <TopicsGrid />
 
     <ConceptAtlasPin />
-
-    <TokenizerSection />
 
     <PathsGrid />
   </main>

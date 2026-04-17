@@ -24,7 +24,7 @@ const paths = [
   'transformers-from-scratch', 'scale-to-a-million'
 ]
 
-const staticRoutes = ['', 'books', 'primitives', 'methodology', 'about']
+const staticRoutes = ['', 'books', 'methodology', 'about']
 
 export default defineEventHandler((event) => {
   setHeader(event, 'Content-Type', 'application/xml')

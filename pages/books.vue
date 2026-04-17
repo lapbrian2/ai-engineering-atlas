@@ -81,15 +81,11 @@ useHead({
 
     <section class="books-grid-section">
       <div class="max">
-        <span class="overline">The nine source books</span>
+        <span class="overline">The nine sources cited across this atlas</span>
         <div class="books-grid">
-          <a
+          <div
             v-for="b in books" :key="b.id"
-            :href="b.amazon"
-            target="_blank"
-            rel="noopener"
             class="book-card"
-            data-hover
           >
             <span class="b-year">{{ b.year }}</span>
             <h3 class="b-title">{{ b.title }}</h3>
@@ -97,9 +93,8 @@ useHead({
             <span class="b-publisher">{{ b.publisher || '—' }}</span>
             <div class="b-footer">
               <span class="b-short">{{ b.short }}</span>
-              <span class="b-arrow">→</span>
             </div>
-          </a>
+          </div>
         </div>
       </div>
     </section>
