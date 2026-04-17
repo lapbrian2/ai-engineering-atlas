@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import * as THREE from 'three'
 import booksData from '~/data/books-index.json'
 
 type Concept = {
@@ -23,14 +24,16 @@ onBeforeUnmount(() => {
   disposers.length = 0
 })
 
-onMounted(async () => {
+const ACCENT_HEX = '#D15B2C'
+const INK_HEX = '#0A0A0E'
+const TEXT_HEX = '#E8E8EE'
+
+onMounted(() => {
   if (!container.value) return
   try {
-    const THREE = await import('three')
-
-    const ACCENT = new THREE.Color('#D15B2C')
-    const INK = new THREE.Color('#0A0A0E')
-    const TEXT = new THREE.Color('#E8E8EE')
+    const ACCENT = new THREE.Color(ACCENT_HEX)
+    const INK = new THREE.Color(INK_HEX)
+    const TEXT = new THREE.Color(TEXT_HEX)
 
     // ---------- Layout: nodes clustered by topic on a sphere ----------
     const topicsOrder = topicGroups.map(t => t.id)
