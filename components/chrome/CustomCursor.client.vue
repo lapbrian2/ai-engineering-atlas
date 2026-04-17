@@ -85,15 +85,6 @@ onMounted(() => {
     nextTick(attach)
   })
 
-  onBeforeUnmount(() => {
-    window.removeEventListener('pointermove', onMove)
-    window.removeEventListener('pointermove', onMagneticMove)
-    disposers.forEach(d => d())
-    magnetTargets.clear()
-    cancelAnimationFrame(rafId)
-    document.body.classList.remove('cursor-live', 'cursor-hover')
-    off()
-  })
 })
 </script>
 

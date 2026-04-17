@@ -211,11 +211,6 @@ onMounted(() => {
   window.addEventListener('resize', resize)
   raf = requestAnimationFrame(() => render(ctx))
 
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', resize)
-    cancelAnimationFrame(raf)
-    io?.disconnect()
-  })
 })
 </script>
 

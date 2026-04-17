@@ -1,6 +1,8 @@
 <script setup lang="ts">
+console.log('[ConceptAtlas3D] script-setup starting')
 import * as THREE from 'three'
 import booksData from '~/data/books-index.json'
+console.log('[ConceptAtlas3D] imports done, THREE:', !!THREE?.Scene)
 
 type Concept = {
   id: string
@@ -29,8 +31,13 @@ const INK_HEX = '#0A0A0E'
 const TEXT_HEX = '#E8E8EE'
 
 onMounted(() => {
-  if (!container.value) return
+  console.log('[ConceptAtlas3D] onMounted fired, container:', !!container.value)
+  if (!container.value) {
+    console.log('[ConceptAtlas3D] no container, aborting')
+    return
+  }
   try {
+    console.log('[ConceptAtlas3D] starting init')
     const ACCENT = new THREE.Color(ACCENT_HEX)
     const INK = new THREE.Color(INK_HEX)
     const TEXT = new THREE.Color(TEXT_HEX)

@@ -34,11 +34,6 @@ function init() {
   }, { threshold: 0 })
   io.observe(canvas.value)
 
-  onBeforeUnmount(() => {
-    window.removeEventListener('pointermove', onMove)
-    io?.disconnect()
-    shader?.dispose()
-  })
 }
 
 onMounted(() => {
