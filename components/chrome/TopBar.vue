@@ -25,7 +25,7 @@ onMounted(() => {
       <NuxtLink to="/#primitives" data-hover>Primitives</NuxtLink>
       <NuxtLink to="/#paths" data-hover>Paths</NuxtLink>
     </nav>
-    <a href="#" class="nav-cta" data-hover>
+    <a href="#" class="nav-cta" data-hover data-magnet>
       <span class="k">⌘K</span>&nbsp;&nbsp;SEARCH
     </a>
   </header>
@@ -92,7 +92,8 @@ nav.primary a.router-link-active::after { transform: scaleX(1); }
   color: var(--text-dim);
   padding: 8px 12px;
   border: 1px solid var(--line-strong);
-  transition: color var(--dur-sm) var(--ease-enter), border-color var(--dur-sm) ease;
+  transition: color var(--dur-sm) var(--ease-enter), border-color var(--dur-sm) ease, transform 280ms var(--ease-premium);
+  will-change: transform;
 }
 .nav-cta:hover { color: var(--text); border-color: var(--accent); }
 .nav-cta .k { color: var(--accent); font-weight: 500; }

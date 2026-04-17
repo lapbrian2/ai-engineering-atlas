@@ -99,8 +99,14 @@ export default defineNuxtConfig({
   // ---- Experimental ----
   experimental: {
     viewTransition: true,
-    payloadExtraction: true
+    payloadExtraction: true,
+    renderJsonPayloads: true
   },
+
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' }
+  } as any,
 
   // ---- Dev ----
   devtools: { enabled: true }

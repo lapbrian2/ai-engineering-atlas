@@ -20,21 +20,26 @@ const tokens = ref<Array<{ text: string; id: number }>>(
 const chars = ref(text.value.length)
 const count = ref(tokens.value.length)
 const ratio = ref(+(chars.value / count.value).toFixed(2))
+const settled = ref(false)
 
 let ticker: number | null = null
 
 const run = async () => {
   const r = await tokenize(text.value)
-  if (!r) return
+  if (!r) {
+    settled.value = true
+    return
+  }
   tokens.value = r.tokens
   chars.value = r.chars
   count.value = r.count
   ratio.value = r.ratio
+  settled.value = true
 }
 
 onMounted(() => {
-  // Lazy-run after a beat so the placeholder shows first
-  ticker = window.setTimeout(run, 400)
+  // Lazy-run after a beat so the placeholder shows first with skeleton shimmer
+  ticker = window.setTimeout(run, 450)
 })
 
 onBeforeUnmount(() => {
@@ -45,8 +50,12 @@ const tokDisplay = (t: string) => t.replace(/ /g, '⎵')
 </script>
 
 <template>
-  <div class="tokens-stream">
-    <span v-for="(tk, i) in tokens" :key="i" class="tok">
+  <div class="tokens-stream" :class="{ 'is-loading': loading, 'is-settled': settled }">
+    <span
+      v-for="(tk, i) in tokens" :key="i"
+      class="tok"
+      :style="{ '--i': i }"
+    >
       {{ tokDisplay(tk.text) }}<span class="id">{{ tk.id }}</span>
     </span>
   </div>
@@ -74,7 +83,22 @@ const tokDisplay = (t: string) => t.replace(/ /g, '⎵')
   background: var(--ink-2);
   border: 1px solid var(--line);
   margin-top: 28px;
+  position: relative;
+  transition: opacity 320ms var(--ease-premium);
 }
+.tokens-stream.is-loading::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: shimmer 1.4s var(--ease-premium) infinite;
+}
+@keyframes shimmer {
+  to { transform: translateX(400%); }
+}
+.tokens-stream.is-loading .tok { opacity: 0.55; }
 .tok {
   font-family: var(--mono);
   font-size: 13px;
@@ -85,7 +109,15 @@ const tokDisplay = (t: string) => t.replace(/ /g, '⎵')
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: background var(--dur-sm) var(--ease-premium), border-color var(--dur-sm) ease, color var(--dur-sm) ease;
+  transition: background var(--dur-sm) var(--ease-premium), border-color var(--dur-sm) ease, color var(--dur-sm) ease, opacity 280ms var(--ease-premium);
+}
+.tokens-stream.is-settled .tok {
+  animation: tok-settle 420ms var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 14ms);
+}
+@keyframes tok-settle {
+  from { opacity: 0; transform: translateY(4px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 .tok .id {
   font-size: 10px;

@@ -41,12 +41,38 @@ onMounted(() => {
     })
   }
 
+  // Magnetic pull on nav CTAs: cursor-tracking translate within a small radius
+  const magnetTargets = new Set<HTMLElement>()
+  const onMagneticMove = (e: PointerEvent) => {
+    magnetTargets.forEach(el => {
+      const r = el.getBoundingClientRect()
+      const cx = r.left + r.width / 2
+      const cy = r.top + r.height / 2
+      const dx = e.clientX - cx
+      const dy = e.clientY - cy
+      const dist = Math.hypot(dx, dy)
+      const reach = 80
+      if (dist < reach) {
+        const pull = (1 - dist / reach) * 12
+        el.style.transform = `translate(${(dx / dist) * pull}px, ${(dy / dist) * pull}px)`
+      } else {
+        el.style.transform = ''
+      }
+    })
+  }
+  const attachMagnet = (el: Element) => {
+    magnetTargets.add(el as HTMLElement)
+  }
+
   // Initial scan — anything with data-hover, plus interactive elements
   const attach = () => {
+    magnetTargets.clear()
     document.querySelectorAll('[data-hover], a, button, .topic, .atlas-card, .path').forEach(attachHover)
+    document.querySelectorAll('[data-magnet]').forEach(attachMagnet)
   }
 
   window.addEventListener('pointermove', onMove)
+  window.addEventListener('pointermove', onMagneticMove)
   attach()
   rafId = requestAnimationFrame(tick)
   document.body.classList.add('cursor-live')
@@ -61,7 +87,9 @@ onMounted(() => {
 
   onBeforeUnmount(() => {
     window.removeEventListener('pointermove', onMove)
+    window.removeEventListener('pointermove', onMagneticMove)
     disposers.forEach(d => d())
+    magnetTargets.clear()
     cancelAnimationFrame(rafId)
     document.body.classList.remove('cursor-live', 'cursor-hover')
     off()

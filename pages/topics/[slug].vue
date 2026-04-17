@@ -115,6 +115,18 @@ useHead(() => ({
   margin-bottom: 12px;
 }
 .prose :deep(p) { margin-bottom: 20px; }
+.prose :deep(article > :first-child::first-letter),
+.prose :deep(.content > p:first-of-type::first-letter) {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-size: 5.2em;
+  line-height: 0.88;
+  float: left;
+  margin: 0.08em 0.12em 0 -0.05em;
+  color: var(--accent);
+  font-style: italic;
+}
 .prose :deep(code:not(pre code)) {
   font-family: var(--mono);
   font-size: 0.9em;

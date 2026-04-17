@@ -53,6 +53,20 @@ img, canvas, svg {
   }
 }
 
+/* ---- Page transitions (Nuxt pageTransition name="page") ---- */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 360ms var(--ease-premium), transform 360ms var(--ease-premium);
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
 /* ---- Typography utilities ---- */
 .display {
   font-family: var(--serif);
