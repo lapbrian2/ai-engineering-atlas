@@ -8,13 +8,19 @@ let io: IntersectionObserver | null = null
 
 const prefersReduced = useReducedMotion()
 
-onMounted(() => {
+function init() {
   if (prefersReduced.value || !canvas.value) return
+  if (canvas.value.clientWidth === 0 || canvas.value.clientHeight === 0) {
+    // Layout not settled yet — retry next frame
+    requestAnimationFrame(init)
+    return
+  }
 
   shader = useShader(canvas.value, fragSource, { dpr: 0.65, fps: 30 })
   if (!shader) return
 
-  // Cursor input
+  shader.start()
+
   const onMove = (e: PointerEvent) => {
     if (!canvas.value || !shader) return
     const r = canvas.value.getBoundingClientRect()
@@ -22,7 +28,6 @@ onMounted(() => {
   }
   window.addEventListener('pointermove', onMove)
 
-  // Only render when hero is in view
   io = new IntersectionObserver(entries => {
     if (!shader) return
     entries[0].isIntersecting ? shader.start() : shader.stop()
@@ -34,6 +39,11 @@ onMounted(() => {
     io?.disconnect()
     shader?.dispose()
   })
+}
+
+onMounted(() => {
+  // Defer one frame so layout settles (hero section has padding + flex)
+  requestAnimationFrame(init)
 })
 </script>
 
