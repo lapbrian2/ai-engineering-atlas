@@ -1,19 +1,19 @@
 <script setup lang="ts">
 const primitives = [
-  { id: 'tokenizer', name: 'Tokenizer', status: 'live', topic: 'Foundation', desc: 'Real BPE encoding. Edit text; tokens recompute.' },
-  { id: 'temperature-sampler', name: 'Temperature sampler', status: 'live', topic: 'Foundation', desc: 'Live probability distribution. Change T; watch the softmax reshape. Top-p (nucleus) included.' },
-  { id: 'attention-heatmap', name: 'Attention heatmap', status: 'live', topic: 'Foundation', desc: 'Hover cells to see query→key attention weights. Five classic patterns (diagonal, induction, etc.).' },
-  { id: 'prompt-diff', name: 'Prompt diff', status: 'soon', topic: 'Prompt Eng', desc: 'Side-by-side zero-shot / few-shot / CoT on the same input.' },
-  { id: 'cot-stepper', name: 'CoT stepper', status: 'soon', topic: 'Prompt Eng', desc: 'Step through a chain-of-thought trace token by token.' },
-  { id: 'metric-calculator', name: 'Metric calculator', status: 'soon', topic: 'Evaluation', desc: 'Paste a prediction + reference; get BLEU, ROUGE, perplexity, F1.' },
-  { id: 'judge-comparator', name: 'Judge comparator', status: 'soon', topic: 'Evaluation', desc: 'Show two candidate outputs to an AI judge; visualize ranking + known biases.' },
-  { id: 'vector-search', name: 'Vector search', status: 'soon', topic: 'RAG', desc: 'Real semantic search over a preloaded corpus. Compare dense vs BM25.' },
-  { id: 'agent-loop', name: 'Agent loop', status: 'soon', topic: 'Agents', desc: 'Step through a ReAct agent trace. Tool calls, observations, next action.' },
-  { id: 'memory-calculator', name: 'Memory calculator', status: 'soon', topic: 'Finetuning', desc: 'Model size × precision × LoRA rank → VRAM required. Full FT vs QLoRA compared.' },
-  { id: 'lora-rank-viz', name: 'LoRA rank visualizer', status: 'soon', topic: 'Finetuning', desc: 'See rank decomposition A · B → ΔW. Which layers, which rank.' },
-  { id: 'pareto-chart', name: 'Pareto chart', status: 'soon', topic: 'Inference', desc: 'Latency vs quality vs cost. Move the slider; see where the frontier is.' },
-  { id: 'quantization-calc', name: 'Quantization calc', status: 'soon', topic: 'Inference', desc: 'Model size in FP32 → INT8 → INT4. What fits in 24 GB.' },
-  { id: 'system-diagram', name: 'System diagram', status: 'soon', topic: 'Architecture', desc: 'Click layers: context, router, cache, guardrails, model. See what each does.' }
+  { id: 'tokenizer',            name: 'Tokenizer',            status: 'live', topic: 'Foundation', desc: 'Real BPE encoding. Edit text; tokens recompute.' },
+  { id: 'temperature-sampler',  name: 'Temperature sampler',  status: 'live', topic: 'Foundation', desc: 'Live probability distribution. Change T; watch the softmax reshape. Top-p (nucleus) included.' },
+  { id: 'attention-heatmap',    name: 'Attention heatmap',    status: 'live', topic: 'Foundation', desc: 'Hover cells to see query→key attention weights. Five classic patterns (diagonal, induction, etc.).' },
+  { id: 'memory-calculator',    name: 'Memory calculator',    status: 'live', topic: 'Finetuning', desc: 'Model size × precision × LoRA rank → VRAM required. Full FT vs LoRA vs QLoRA compared live.' },
+  { id: 'vector-search',        name: 'Vector search',        status: 'live', topic: 'RAG',        desc: '40-doc corpus with real BM25 + MiniLM-L6-v2 embeddings in-browser. Switch modes; compare BM25, dense, and hybrid RRF.' },
+  { id: 'prompt-diff',          name: 'Prompt diff',          status: 'soon', topic: 'Prompt Eng', desc: 'Side-by-side zero-shot / few-shot / CoT on the same input.' },
+  { id: 'cot-stepper',          name: 'CoT stepper',          status: 'soon', topic: 'Prompt Eng', desc: 'Step through a chain-of-thought trace token by token.' },
+  { id: 'metric-calculator',    name: 'Metric calculator',    status: 'soon', topic: 'Evaluation', desc: 'Paste a prediction + reference; get BLEU, ROUGE, perplexity, F1.' },
+  { id: 'judge-comparator',     name: 'Judge comparator',     status: 'soon', topic: 'Evaluation', desc: 'Show two candidate outputs to an AI judge; visualize ranking + known biases.' },
+  { id: 'agent-loop',           name: 'Agent loop',           status: 'soon', topic: 'Agents',     desc: 'Step through a ReAct agent trace. Tool calls, observations, next action.' },
+  { id: 'lora-rank-viz',        name: 'LoRA rank visualizer', status: 'soon', topic: 'Finetuning', desc: 'See rank decomposition A · B → ΔW. Which layers, which rank.' },
+  { id: 'pareto-chart',         name: 'Pareto chart',         status: 'soon', topic: 'Inference',  desc: 'Latency vs quality vs cost. Move the slider; see where the frontier is.' },
+  { id: 'quantization-calc',    name: 'Quantization calc',    status: 'soon', topic: 'Inference',  desc: 'Model size in FP32 → INT8 → INT4. What fits in 24 GB.' },
+  { id: 'system-diagram',       name: 'System diagram',       status: 'soon', topic: 'Architecture', desc: 'Click layers: context, router, cache, guardrails, model. See what each does.' }
 ]
 
 useHead({
@@ -75,6 +75,28 @@ useHead({
           Hover any cell to see the attention weight between query and key. Switch patterns to see how different attention heads specialize.
         </p>
         <AttentionHeatmap />
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <div class="max">
+        <span class="overline">§ 03 · Primitive in place</span>
+        <h2 class="h2">Memory <em>calculator.</em></h2>
+        <p class="lede" style="margin-bottom: 40px;">
+          Model size, scheme, rank, precision, batch, sequence length → estimated peak VRAM. The LoRA vs QLoRA gap is immediately visible.
+        </p>
+        <MemoryCalculator />
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <div class="max">
+        <span class="overline">§ 04 · Primitive in place</span>
+        <h2 class="h2">Vector <em>search.</em></h2>
+        <p class="lede" style="margin-bottom: 40px;">
+          40-document corpus of AI engineering snippets. BM25 runs instantly; dense embeddings via MiniLM-L6-v2 lazy-load on first search. Switch modes; compare retrieval strategies on the same query.
+        </p>
+        <VectorSearchDemo />
       </div>
     </section>
   </main>
