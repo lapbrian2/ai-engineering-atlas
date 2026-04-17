@@ -9,7 +9,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate && npx pagefind --site .output/public",
+    "generate": "nuxt generate && npx pagefind --site .vercel/output/static --output-subdir pagefind",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck"
