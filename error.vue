@@ -6,7 +6,6 @@ const is404 = computed(() => props.error?.statusCode === 404)
 const suggestions = [
   { label: 'Ten topics', to: '/#topics' },
   { label: 'Cross-Books Index', to: '/books' },
-  { label: 'Interactive primitives', to: '/primitives' },
   { label: 'Reading paths', to: '/#paths' },
   { label: 'Methodology', to: '/methodology' }
 ]
