@@ -71,11 +71,12 @@ img, canvas, svg {
 .display {
   font-family: var(--serif);
   font-weight: 300;
-  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-variation-settings: "opsz" 96, "SOFT" 50;
   font-size: var(--fs-display);
-  line-height: 0.88;
-  letter-spacing: -0.03em;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
   color: var(--text);
+  word-spacing: 0.1em;
 }
 .display em {
   font-style: italic;

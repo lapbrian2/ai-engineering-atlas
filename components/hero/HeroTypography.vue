@@ -97,6 +97,9 @@ onMounted(() => {
   transform: translateY(110%);
   opacity: 0;
 }
+.hero-head :deep(em) { margin-right: 0.28em; }
+.hero-head :deep(.accent-word) { margin-left: 0; }
+.hero-head :deep(.whitespace) { width: 0.28em; display: inline-block; }
 .hero-foot {
   margin-top: clamp(40px, 6vw, 84px);
   display: grid;

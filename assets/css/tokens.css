@@ -38,7 +38,7 @@
   --mono:   'JetBrains Mono', ui-monospace, Menlo, monospace;
 
   /* --- Typography scale (clamp-based, fluid) --- */
-  --fs-display: clamp(3.75rem, 12vw, 12rem);
+  --fs-display: clamp(2.75rem, 8vw, 7.5rem);
   --fs-h2:      clamp(2.2rem, 5vw, 4rem);
   --fs-h3:      clamp(1.4rem, 2vw, 2rem);
   --fs-lede:    clamp(1rem, 1.3vw, 1.15rem);
