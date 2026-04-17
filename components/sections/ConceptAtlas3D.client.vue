@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import * as THREE from 'three'
 import booksData from '~/data/books-index.json'
-
-// =============================================================
-// The 40 concepts, clustered in 3D by topic group.
-// Topics are placed on a sphere (spherical distribution), concepts
-// fan out within each topic cluster. Edges connect concepts that
-// share a book at substantive+ depth.
-// =============================================================
 
 type Concept = {
   id: string
@@ -16,300 +8,260 @@ type Concept = {
   coverage: Array<{ book: string; chapter?: string; pages?: string | null; depth: 0 | 1 | 2 | 3 }>
 }
 
-const books = (booksData as any).books as Array<{ id: string; short: string }>
 const concepts = (booksData as any).concepts as Concept[]
 const topicGroups = (booksData as any).topics as Array<{ id: string; name: string }>
 
 const container = ref<HTMLDivElement | null>(null)
-const hoverLabel = ref<{ x: number; y: number; name: string; topic: string; books: number; primary?: string } | null>(null)
+const status = ref<'booting' | 'ready' | 'error'>('booting')
+const hoverLabel = ref<{ x: number; y: number; name: string; topic: string; books: number } | null>(null)
 
-let scene: THREE.Scene
-let camera: THREE.PerspectiveCamera
-let renderer: THREE.WebGLRenderer
-let raycaster: THREE.Raycaster
-let pointer: THREE.Vector2
-let nodeMesh: THREE.InstancedMesh
-let nodeData: Array<{ id: string; name: string; topic: string; coverageCount: number; pos: THREE.Vector3; topicName: string; primary?: string }>
-let edgeSegments: THREE.LineSegments
-let ringMesh: THREE.Mesh | null = null
-let hoveredIndex = -1
-let io: IntersectionObserver | null = null
-let running = false
-let rafId = 0
-let autoRotate = 0
-let scrollProgress = 0
-
-const ACCENT = new THREE.Color('#D15B2C')
-const ACCENT_DIM = new THREE.Color('#5b3017')
-const INK = new THREE.Color('#0A0A0E')
-const TEXT = new THREE.Color('#E8E8EE')
-
-// Spherical Fibonacci distribution for topic cluster centers
-function clusterCenters(n: number, radius = 80) {
-  const centers: THREE.Vector3[] = []
-  const phi = Math.PI * (3 - Math.sqrt(5))
-  for (let i = 0; i < n; i++) {
-    const y = 1 - (i / (n - 1)) * 2
-    const r = Math.sqrt(1 - y * y)
-    const theta = phi * i
-    centers.push(new THREE.Vector3(Math.cos(theta) * r * radius, y * radius, Math.sin(theta) * r * radius))
-  }
-  return centers
-}
-
-function layout() {
-  nodeData = []
-  const topicsOrder = topicGroups.map(t => t.id)
-  const centers = clusterCenters(topicsOrder.length, 70)
-  const byTopic: Record<string, Concept[]> = {}
-  concepts.forEach(c => { (byTopic[c.topic] ??= []).push(c) })
-
-  topicsOrder.forEach((topicId, ti) => {
-    const center = centers[ti]
-    const list = byTopic[topicId] || []
-    const r = 16 + Math.min(list.length, 8) * 1.5
-    list.forEach((c, i) => {
-      const phi = (i / list.length) * Math.PI * 2
-      const theta = ((i * 2) % list.length) / list.length * Math.PI
-      const pos = new THREE.Vector3(
-        center.x + Math.cos(phi) * Math.sin(theta) * r,
-        center.y + Math.cos(theta) * r * 0.6,
-        center.z + Math.sin(phi) * Math.sin(theta) * r
-      )
-      const coverageCount = c.coverage.filter(x => x.depth >= 2).length
-      nodeData.push({
-        id: c.id,
-        name: c.name,
-        topic: c.topic,
-        topicName: topicGroups.find(t => t.id === c.topic)?.name || c.topic,
-        coverageCount,
-        pos
-      })
-    })
-  })
-}
-
-function buildNodes() {
-  const geom = new THREE.SphereGeometry(1, 20, 20)
-  const mat = new THREE.MeshBasicMaterial({ color: TEXT, transparent: true, opacity: 0.88 })
-  nodeMesh = new THREE.InstancedMesh(geom, mat, nodeData.length)
-
-  const dummy = new THREE.Object3D()
-  nodeData.forEach((n, i) => {
-    dummy.position.copy(n.pos)
-    const scale = 0.9 + Math.min(n.coverageCount, 6) * 0.28
-    dummy.scale.setScalar(scale)
-    dummy.updateMatrix()
-    nodeMesh.setMatrixAt(i, dummy.matrix)
-    // 12% of nodes are accent-colored (those covered by 4+ books substantively)
-    const isHot = n.coverageCount >= 4
-    nodeMesh.setColorAt(i, isHot ? ACCENT : TEXT)
-  })
-  nodeMesh.instanceColor!.needsUpdate = true
-  scene.add(nodeMesh)
-}
-
-function buildEdges() {
-  // Edge if two concepts share a book at depth >= 2
-  const positions: number[] = []
-  const colors: number[] = []
-  const bookMap: Record<string, Set<string>> = {}
-  concepts.forEach(c => {
-    c.coverage.forEach(cov => {
-      if (cov.depth >= 2) {
-        (bookMap[cov.book] ??= new Set()).add(c.id)
-      }
-    })
-  })
-
-  const maxPerBook = 12 // cap edge count so it doesn't become spaghetti
-  const added = new Set<string>()
-
-  Object.values(bookMap).forEach(set => {
-    const arr = Array.from(set)
-    let count = 0
-    for (let i = 0; i < arr.length && count < maxPerBook; i++) {
-      for (let j = i + 1; j < arr.length && count < maxPerBook; j++) {
-        const key = arr[i] < arr[j] ? `${arr[i]}-${arr[j]}` : `${arr[j]}-${arr[i]}`
-        if (added.has(key)) continue
-        added.add(key)
-        const a = nodeData.find(n => n.id === arr[i])
-        const b = nodeData.find(n => n.id === arr[j])
-        if (!a || !b) continue
-        positions.push(a.pos.x, a.pos.y, a.pos.z, b.pos.x, b.pos.y, b.pos.z)
-        // fade edges by distance
-        const dist = a.pos.distanceTo(b.pos)
-        const strength = Math.max(0.04, 0.35 - dist / 400)
-        const c1 = new THREE.Color().lerpColors(ACCENT, INK, 1 - strength)
-        const c2 = new THREE.Color().lerpColors(ACCENT, INK, 1 - strength)
-        colors.push(c1.r, c1.g, c1.b, c2.r, c2.g, c2.b)
-        count++
-      }
-    }
-  })
-
-  const geom = new THREE.BufferGeometry()
-  geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-  geom.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-  const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.42 })
-  edgeSegments = new THREE.LineSegments(geom, mat)
-  scene.add(edgeSegments)
-}
-
-function setHover(index: number, clientX: number, clientY: number) {
-  if (index === hoveredIndex) return
-  hoveredIndex = index
-
-  if (ringMesh) {
-    scene.remove(ringMesh)
-    ringMesh.geometry.dispose()
-    ringMesh = null
-  }
-
-  if (index === -1) {
-    hoverLabel.value = null
-    document.body.style.cursor = ''
-    return
-  }
-
-  const node = nodeData[index]
-  if (!node) return
-
-  // Add a ring around the hovered node
-  const ringGeom = new THREE.RingGeometry(2.4, 2.8, 32)
-  const ringMat = new THREE.MeshBasicMaterial({
-    color: ACCENT,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.9
-  })
-  ringMesh = new THREE.Mesh(ringGeom, ringMat)
-  ringMesh.position.copy(node.pos)
-  ringMesh.lookAt(camera.position)
-  scene.add(ringMesh)
-
-  hoverLabel.value = {
-    x: clientX,
-    y: clientY,
-    name: node.name,
-    topic: node.topicName,
-    books: node.coverageCount
-  }
-  document.body.style.cursor = 'pointer'
-}
-
-function onPointerMove(e: PointerEvent) {
-  if (!container.value) return
-  const rect = container.value.getBoundingClientRect()
-  pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
-  pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
-
-  raycaster.setFromCamera(pointer, camera)
-  const hits = raycaster.intersectObject(nodeMesh)
-  const hitIdx = hits.length > 0 ? hits[0].instanceId ?? -1 : -1
-  setHover(hitIdx, e.clientX, e.clientY)
-}
-
-function onClick() {
-  if (hoveredIndex < 0) return
-  const node = nodeData[hoveredIndex]
-  if (node) navigateTo(`/concepts/${node.id}`)
-}
-
-function onResize() {
-  if (!container.value) return
-  const w = container.value.clientWidth
-  const h = container.value.clientHeight
-  renderer.setSize(w, h)
-  camera.aspect = w / h
-  camera.updateProjectionMatrix()
-}
-
-function animate() {
-  if (!running) return
-  autoRotate += 0.0015
-  const rx = Math.cos(autoRotate + scrollProgress * 0.8) * 180
-  const rz = Math.sin(autoRotate + scrollProgress * 0.8) * 180
-  const ry = 30 + scrollProgress * 30
-  camera.position.set(rx, ry, rz)
-  camera.lookAt(0, 0, 0)
-
-  if (ringMesh) ringMesh.lookAt(camera.position)
-  renderer.render(scene, camera)
-  rafId = requestAnimationFrame(animate)
-}
-
-let onScroll: (() => void) | null = null
-
-onMounted(() => {
-  if (!container.value) return
-
-  layout()
-
-  scene = new THREE.Scene()
-  scene.fog = new THREE.Fog(INK, 120, 320)
-
-  const w = container.value.clientWidth
-  const h = container.value.clientHeight
-  camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000)
-  camera.position.set(180, 30, 180)
-
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
-  renderer.setSize(w, h)
-  renderer.setClearColor(INK, 0)
-  container.value.appendChild(renderer.domElement)
-
-  raycaster = new THREE.Raycaster()
-  raycaster.params.Line!.threshold = 0.5
-  pointer = new THREE.Vector2()
-
-  buildNodes()
-  buildEdges()
-
-  renderer.domElement.addEventListener('pointermove', onPointerMove)
-  renderer.domElement.addEventListener('click', onClick)
-  window.addEventListener('resize', onResize)
-
-  onScroll = () => {
-    if (!container.value) return
-    const rect = container.value.getBoundingClientRect()
-    const viewport = window.innerHeight
-    scrollProgress = Math.max(0, Math.min(1, (viewport - rect.top) / (viewport + rect.height)))
-  }
-  window.addEventListener('scroll', onScroll, { passive: true })
-
-  io = new IntersectionObserver(entries => {
-    const intersecting = entries[0]?.isIntersecting
-    if (intersecting && !running) {
-      running = true
-      animate()
-    } else if (!intersecting) {
-      running = false
-    }
-  }, { threshold: 0 })
-  io.observe(container.value)
-})
+// Disposers registered in setup so they're always cleanable
+const disposers: Array<() => void> = []
 
 onBeforeUnmount(() => {
-  running = false
-  cancelAnimationFrame(rafId)
-  io?.disconnect()
-  window.removeEventListener('resize', onResize)
-  if (onScroll) window.removeEventListener('scroll', onScroll)
-  if (renderer) {
-    renderer.domElement.removeEventListener('pointermove', onPointerMove)
-    renderer.domElement.removeEventListener('click', onClick)
-    renderer.dispose()
-  }
-  if (ringMesh) ringMesh.geometry.dispose()
-  if (nodeMesh) {
-    nodeMesh.geometry.dispose()
-    ;(nodeMesh.material as THREE.Material).dispose()
-  }
-  if (edgeSegments) {
-    edgeSegments.geometry.dispose()
-    ;(edgeSegments.material as THREE.Material).dispose()
+  disposers.forEach(d => { try { d() } catch {} })
+  disposers.length = 0
+})
+
+onMounted(async () => {
+  if (!container.value) return
+  try {
+    const THREE = await import('three')
+
+    const ACCENT = new THREE.Color('#D15B2C')
+    const INK = new THREE.Color('#0A0A0E')
+    const TEXT = new THREE.Color('#E8E8EE')
+
+    // ---------- Layout: nodes clustered by topic on a sphere ----------
+    const topicsOrder = topicGroups.map(t => t.id)
+    const topicCenters: any[] = []
+    const phi = Math.PI * (3 - Math.sqrt(5))
+    for (let i = 0; i < topicsOrder.length; i++) {
+      const y = 1 - (i / (topicsOrder.length - 1)) * 2
+      const r = Math.sqrt(1 - y * y)
+      const theta = phi * i
+      topicCenters.push(new THREE.Vector3(Math.cos(theta) * r * 70, y * 70, Math.sin(theta) * r * 70))
+    }
+
+    const byTopic: Record<string, Concept[]> = {}
+    concepts.forEach(c => { (byTopic[c.topic] ??= []).push(c) })
+
+    type Node = { id: string; name: string; topic: string; topicName: string; coverageCount: number; pos: any }
+    const nodeData: Node[] = []
+    topicsOrder.forEach((topicId, ti) => {
+      const center = topicCenters[ti]
+      const list = byTopic[topicId] || []
+      const radius = 14 + Math.min(list.length, 8) * 1.4
+      list.forEach((c, i) => {
+        const p = (i / Math.max(1, list.length)) * Math.PI * 2
+        const t = ((i * 2.3) % Math.max(1, list.length)) / Math.max(1, list.length) * Math.PI
+        const pos = new THREE.Vector3(
+          center.x + Math.cos(p) * Math.sin(t) * radius,
+          center.y + Math.cos(t) * radius * 0.6,
+          center.z + Math.sin(p) * Math.sin(t) * radius
+        )
+        nodeData.push({
+          id: c.id,
+          name: c.name,
+          topic: c.topic,
+          topicName: topicGroups.find(g => g.id === c.topic)?.name || c.topic,
+          coverageCount: c.coverage.filter(x => x.depth >= 2).length,
+          pos
+        })
+      })
+    })
+
+    // ---------- Scene ----------
+    const scene = new THREE.Scene()
+    scene.fog = new THREE.Fog(INK, 140, 340)
+
+    const w = container.value.clientWidth
+    const h = container.value.clientHeight || 720
+    const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000)
+    camera.position.set(180, 30, 180)
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
+    renderer.setSize(w, h)
+    renderer.setClearColor(INK, 0)
+    container.value.appendChild(renderer.domElement)
+
+    // ---------- Nodes ----------
+    const nodeGeom = new THREE.SphereGeometry(1, 18, 18)
+    const nodeMat = new THREE.MeshBasicMaterial({ color: TEXT, transparent: true, opacity: 0.88 })
+    const nodeMesh = new THREE.InstancedMesh(nodeGeom, nodeMat, nodeData.length)
+    const dummy = new THREE.Object3D()
+    nodeData.forEach((n, i) => {
+      dummy.position.copy(n.pos)
+      const scale = 1.0 + Math.min(n.coverageCount, 6) * 0.32
+      dummy.scale.setScalar(scale)
+      dummy.updateMatrix()
+      nodeMesh.setMatrixAt(i, dummy.matrix)
+      nodeMesh.setColorAt(i, n.coverageCount >= 4 ? ACCENT : TEXT)
+    })
+    if (nodeMesh.instanceColor) nodeMesh.instanceColor.needsUpdate = true
+    scene.add(nodeMesh)
+
+    // ---------- Edges ----------
+    const bookMap: Record<string, Set<string>> = {}
+    concepts.forEach(c => {
+      c.coverage.forEach(cov => {
+        if (cov.depth >= 2) {
+          (bookMap[cov.book] ??= new Set()).add(c.id)
+        }
+      })
+    })
+    const positions: number[] = []
+    const colors: number[] = []
+    const added = new Set<string>()
+    Object.values(bookMap).forEach(set => {
+      const arr = Array.from(set)
+      let count = 0
+      for (let i = 0; i < arr.length && count < 10; i++) {
+        for (let j = i + 1; j < arr.length && count < 10; j++) {
+          const key = arr[i] < arr[j] ? `${arr[i]}-${arr[j]}` : `${arr[j]}-${arr[i]}`
+          if (added.has(key)) continue
+          added.add(key)
+          const a = nodeData.find(n => n.id === arr[i])
+          const b = nodeData.find(n => n.id === arr[j])
+          if (!a || !b) continue
+          positions.push(a.pos.x, a.pos.y, a.pos.z, b.pos.x, b.pos.y, b.pos.z)
+          const strength = Math.max(0.08, 0.4 - a.pos.distanceTo(b.pos) / 400)
+          colors.push(ACCENT.r * strength, ACCENT.g * strength, ACCENT.b * strength,
+                      ACCENT.r * strength, ACCENT.g * strength, ACCENT.b * strength)
+          count++
+        }
+      }
+    })
+    const edgeGeom = new THREE.BufferGeometry()
+    edgeGeom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
+    edgeGeom.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    const edgeMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55 })
+    const edgeSegments = new THREE.LineSegments(edgeGeom, edgeMat)
+    scene.add(edgeSegments)
+
+    // ---------- Hover ring ----------
+    const ringGeom = new THREE.RingGeometry(2.6, 3.1, 32)
+    const ringMat = new THREE.MeshBasicMaterial({ color: ACCENT, side: THREE.DoubleSide, transparent: true, opacity: 0 })
+    const ring = new THREE.Mesh(ringGeom, ringMat)
+    ring.visible = false
+    scene.add(ring)
+
+    // ---------- Interaction ----------
+    const raycaster = new THREE.Raycaster()
+    const pointer = new THREE.Vector2()
+    let hoveredIndex = -1
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!container.value) return
+      const rect = container.value.getBoundingClientRect()
+      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+      raycaster.setFromCamera(pointer, camera)
+      const hits = raycaster.intersectObject(nodeMesh)
+      const idx = hits.length > 0 ? (hits[0].instanceId ?? -1) : -1
+      if (idx !== hoveredIndex) {
+        hoveredIndex = idx
+        if (idx < 0) {
+          ring.visible = false
+          hoverLabel.value = null
+          document.body.style.cursor = ''
+        } else {
+          const n = nodeData[idx]
+          ring.position.copy(n.pos)
+          ring.lookAt(camera.position)
+          ring.visible = true
+          ;(ring.material as any).opacity = 0.9
+          hoverLabel.value = { x: e.clientX, y: e.clientY, name: n.name, topic: n.topicName, books: n.coverageCount }
+          document.body.style.cursor = 'pointer'
+        }
+      } else if (idx >= 0 && hoverLabel.value) {
+        hoverLabel.value.x = e.clientX
+        hoverLabel.value.y = e.clientY
+      }
+    }
+
+    const onClick = () => {
+      if (hoveredIndex < 0) return
+      navigateTo(`/concepts/${nodeData[hoveredIndex].id}`)
+    }
+
+    renderer.domElement.addEventListener('pointermove', onPointerMove)
+    renderer.domElement.addEventListener('click', onClick)
+
+    // ---------- Resize ----------
+    const onResize = () => {
+      if (!container.value) return
+      const W = container.value.clientWidth
+      const H = container.value.clientHeight || 720
+      renderer.setSize(W, H)
+      camera.aspect = W / H
+      camera.updateProjectionMatrix()
+    }
+    window.addEventListener('resize', onResize)
+
+    // ---------- Scroll → camera orbit offset ----------
+    let scrollProgress = 0
+    const onScroll = () => {
+      if (!container.value) return
+      const rect = container.value.getBoundingClientRect()
+      const viewport = window.innerHeight
+      scrollProgress = Math.max(0, Math.min(1, (viewport - rect.top) / (viewport + rect.height)))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+
+    // ---------- Render loop (paused when off-screen) ----------
+    let running = true
+    let rafId = 0
+    let auto = 0
+    const loop = () => {
+      if (!running) return
+      auto += 0.0012
+      const rx = Math.cos(auto + scrollProgress * 0.6) * 180
+      const rz = Math.sin(auto + scrollProgress * 0.6) * 180
+      const ry = 30 + scrollProgress * 30
+      camera.position.set(rx, ry, rz)
+      camera.lookAt(0, 0, 0)
+      if (ring.visible) ring.lookAt(camera.position)
+      renderer.render(scene, camera)
+      rafId = requestAnimationFrame(loop)
+    }
+
+    const io = new IntersectionObserver(entries => {
+      const visible = entries[0]?.isIntersecting
+      if (visible && !running) { running = true; loop() }
+      else if (!visible) { running = false; cancelAnimationFrame(rafId) }
+    }, { threshold: 0 })
+    io.observe(container.value)
+
+    // Kick off
+    loop()
+    status.value = 'ready'
+
+    // ---------- Register disposers ----------
+    disposers.push(() => {
+      running = false
+      cancelAnimationFrame(rafId)
+      io.disconnect()
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('scroll', onScroll)
+      renderer.domElement.removeEventListener('pointermove', onPointerMove)
+      renderer.domElement.removeEventListener('click', onClick)
+      renderer.dispose()
+      nodeGeom.dispose()
+      nodeMat.dispose()
+      edgeGeom.dispose()
+      edgeMat.dispose()
+      ringGeom.dispose()
+      ringMat.dispose()
+      if (container.value) {
+        try { container.value.removeChild(renderer.domElement) } catch {}
+      }
+    })
+  } catch (e) {
+    console.error('[ConceptAtlas3D] init failed:', e)
+    status.value = 'error'
   }
 })
 </script>
@@ -320,13 +272,19 @@ onBeforeUnmount(() => {
       <span class="chap">§ 02</span>
       <h2 class="h2">The <em>concept</em> <span class="accent-word">atlas.</span></h2>
       <p class="lede">
-        Forty concepts, arranged in 3D by topic cluster. Edges connect concepts that share coverage in the nine canonical sources. Drag to orbit, hover a node to see its citation count, click to open the concept page.
+        Forty concepts, arranged in 3D by topic cluster. Edges connect concepts that share coverage in the canonical sources. Hover any node to see its topic and coverage count. Click to open the concept page.
       </p>
     </div>
 
     <div ref="container" class="a3-canvas" />
 
-    <!-- Hover tooltip -->
+    <div v-if="status === 'booting'" class="a3-status">
+      <span class="overline">Loading concept graph…</span>
+    </div>
+    <div v-if="status === 'error'" class="a3-status error">
+      <span class="overline">Concept graph unavailable · refresh to retry</span>
+    </div>
+
     <Transition name="fade">
       <div
         v-if="hoverLabel"
@@ -381,17 +339,29 @@ onBeforeUnmount(() => {
   max-width: 46ch;
 }
 
-.a3-canvas {
+.a3-canvas { position: absolute; inset: 0; z-index: 1; }
+
+.a3-status {
   position: absolute;
-  inset: 0;
-  z-index: 1;
+  bottom: clamp(24px, 3vw, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 8px 14px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
+.a3-status.error { border-color: var(--accent); color: var(--accent); }
 
 .a3-tooltip {
   position: fixed;
   z-index: 10;
   pointer-events: none;
-  background: rgba(10, 10, 14, 0.85);
+  background: rgba(10, 10, 14, 0.88);
   backdrop-filter: blur(10px) saturate(140%);
   border: 1px solid var(--accent);
   padding: 12px 16px;
@@ -416,23 +386,11 @@ onBeforeUnmount(() => {
   line-height: 1.1;
   margin: 2px 0;
 }
-.t-books {
-  font-size: 10px;
-  color: var(--text-dim);
-  letter-spacing: 0.08em;
-}
-.t-books em {
-  color: var(--accent);
-  font-style: normal;
-  font-weight: 500;
-}
+.t-books { font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; }
+.t-books em { color: var(--accent); font-style: normal; font-weight: 500; }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 180ms var(--ease-premium);
-}
+.fade-enter-active, .fade-leave-active { transition: opacity 180ms var(--ease-premium); }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 
-@media (max-width: 720px) {
-  .atlas-3d { height: 90vh; min-height: 600px; }
-}
+@media (max-width: 720px) { .atlas-3d { height: 90vh; min-height: 600px; } }
 </style>
