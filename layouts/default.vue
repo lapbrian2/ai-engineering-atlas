@@ -9,6 +9,7 @@ useGsapScroll()
   <CustomCursor />
   <ProgressRail />
   <TopBar />
+  <SearchPalette />
 
   <div id="smooth-wrapper">
     <div id="smooth-content">

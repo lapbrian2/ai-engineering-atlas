@@ -2,6 +2,12 @@
 const topbar = ref<HTMLElement | null>(null)
 const { $ScrollTrigger } = useNuxtApp() as any
 
+function openSearch() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('atlas:open-search'))
+  }
+}
+
 onMounted(() => {
   if (!$ScrollTrigger || !topbar.value) return
   $ScrollTrigger.create({
@@ -25,9 +31,9 @@ onMounted(() => {
       <NuxtLink to="/#primitives" data-hover>Primitives</NuxtLink>
       <NuxtLink to="/#paths" data-hover>Paths</NuxtLink>
     </nav>
-    <a href="#" class="nav-cta" data-hover data-magnet>
+    <button class="nav-cta" data-hover data-magnet type="button" @click="openSearch">
       <span class="k">⌘K</span>&nbsp;&nbsp;SEARCH
-    </a>
+    </button>
   </header>
 </template>
 
