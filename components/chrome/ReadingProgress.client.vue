@@ -10,10 +10,19 @@ const targetSelector = computed(() => props.target || 'article, .topic-body')
 const supportsScrollTimeline = typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: scroll()')
 const progress = ref(0)
 
-onMounted(() => {
-  if (supportsScrollTimeline) return // CSS handles it
+let updateFn: (() => void) | null = null
 
-  const update = () => {
+onBeforeUnmount(() => {
+  if (updateFn) {
+    window.removeEventListener('scroll', updateFn)
+    window.removeEventListener('resize', updateFn)
+  }
+})
+
+onMounted(() => {
+  if (supportsScrollTimeline) return
+
+  updateFn = () => {
     const el = document.querySelector(targetSelector.value) as HTMLElement | null
     if (!el) return
     const rect = el.getBoundingClientRect()
@@ -23,14 +32,9 @@ onMounted(() => {
     progress.value = Math.max(0, Math.min(1, scrolled / height))
   }
 
-  update()
-  window.addEventListener('scroll', update, { passive: true })
-  window.addEventListener('resize', update)
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('scroll', update)
-    window.removeEventListener('resize', update)
-  })
+  updateFn()
+  window.addEventListener('scroll', updateFn, { passive: true })
+  window.addEventListener('resize', updateFn)
 })
 </script>
 
