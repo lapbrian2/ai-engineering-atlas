@@ -5,7 +5,7 @@ title: Evaluation
 subtitle: From perplexity to AI-as-judge — benchmarks, comparative eval, and pipelines you can trust
 topic: evaluation
 difficulty: intermediate
-estimatedReadMinutes: 26
+estimatedReadMinutes: 12
 hero: false
 primitives:
   - metric-calculator

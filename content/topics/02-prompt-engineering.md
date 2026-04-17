@@ -5,7 +5,7 @@ title: Prompt Engineering
 subtitle: The craft of instructing a model to give you what you actually want
 topic: prompt-engineering
 difficulty: intermediate
-estimatedReadMinutes: 22
+estimatedReadMinutes: 12
 hero: true
 primitives:
   - prompt-playground

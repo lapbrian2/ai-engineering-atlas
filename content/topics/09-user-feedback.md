@@ -5,7 +5,7 @@ title: User Feedback
 subtitle: Explicit signals, implicit patterns, feedback loops that actually close
 topic: user-feedback
 difficulty: intermediate
-estimatedReadMinutes: 18
+estimatedReadMinutes: 10
 hero: false
 primitives: [pattern-explorer]
 citations:

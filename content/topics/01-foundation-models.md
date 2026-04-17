@@ -5,7 +5,7 @@ title: Understanding Foundation Models
 subtitle: Training data, architecture, post-training, sampling — and how a transformer becomes a product
 topic: foundation-models
 difficulty: intermediate
-estimatedReadMinutes: 28
+estimatedReadMinutes: 13
 hero: true
 primitives:
   - tokenizer

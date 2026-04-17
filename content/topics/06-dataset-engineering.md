@@ -5,7 +5,7 @@ title: Dataset Engineering
 subtitle: Quality, coverage, synthesis, deduplication — from raw corpus to training-ready
 topic: dataset-engineering
 difficulty: intermediate
-estimatedReadMinutes: 24
+estimatedReadMinutes: 14
 hero: false
 primitives: [quality-scorer, synthesis-demo]
 citations:

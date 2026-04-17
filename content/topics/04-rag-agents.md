@@ -5,7 +5,7 @@ title: RAG & Agents
 subtitle: Embeddings, retrieval, tool-use, agent planning — the foundations of applied LLM systems
 topic: rag-agents
 difficulty: intermediate
-estimatedReadMinutes: 34
+estimatedReadMinutes: 13
 hero: true
 primitives:
   - vector-search

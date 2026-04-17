@@ -5,7 +5,7 @@ title: Finetuning
 subtitle: When to, when not to. LoRA math, quantization, multi-task merging — with the memory budget
 topic: finetuning
 difficulty: advanced
-estimatedReadMinutes: 30
+estimatedReadMinutes: 12
 hero: false
 primitives:
   - memory-calculator

@@ -5,7 +5,7 @@ title: AI System Architecture
 subtitle: Gateway, router, cache, guardrails, model — a reference for production AI systems
 topic: system-architecture
 difficulty: intermediate
-estimatedReadMinutes: 22
+estimatedReadMinutes: 13
 hero: false
 primitives: [system-diagram]
 citations:

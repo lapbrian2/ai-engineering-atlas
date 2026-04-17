@@ -5,7 +5,7 @@ title: Inference Optimization
 subtitle: Quantization, batching, KV cache, speculative decoding — the latency-quality-cost trilemma
 topic: inference-optimization
 difficulty: advanced
-estimatedReadMinutes: 28
+estimatedReadMinutes: 13
 hero: false
 primitives: [pareto-chart, quantization-calc]
 citations:

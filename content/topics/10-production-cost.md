@@ -5,7 +5,7 @@ title: Production & Cost
 subtitle: Deployment, cost modeling, monitoring, rollout — engineering discipline at scale
 topic: production-cost
 difficulty: advanced
-estimatedReadMinutes: 26
+estimatedReadMinutes: 15
 hero: false
 primitives: [cost-calc, rollout-planner]
 citations:
