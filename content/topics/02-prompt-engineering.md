@@ -85,7 +85,7 @@ Category:
 
 Notice the last example is a near-miss — it mentions pricing (billing-adjacent) but the intent is churn, not a billing question. Including that disambiguation in the prompt is how you teach the boundary.
 
-<PromptPlayground/>
+<PromptPlayground />
 
 Few-shot breaks down when you need genuinely compositional reasoning — the model learns the surface pattern of your examples but cannot recombine the underlying skills. When that happens, you need chain-of-thought or decomposition, not more examples.
 
@@ -106,7 +106,7 @@ Reasoning:
 Answer:
 ```
 
-<CoTStepper/>
+<CoTStepper />
 
 Two caveats. First, modern reasoning-tuned models (the post-o1-generation crop) already perform internal CoT; telling them to "think step by step" can actually hurt performance by forcing a shallower process than the one they would have run unprompted. Read your model's card before adding CoT reflexively. Second, CoT makes outputs longer, which makes them slower and more expensive. For latency-sensitive paths, consider generating CoT traces once during development to design a better zero-shot prompt, then dropping the CoT at serve time.
 

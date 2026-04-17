@@ -47,7 +47,7 @@ Three properties of the data matter more than raw size:
 
 One consequence worth internalizing: cutoff dates matter. A model's knowledge of the world ends roughly when its pretraining data was collected. Anything after that — new APIs, new events, new facts — has to come in through the prompt, retrieval, or tools.
 
-<TokenizerPrimitive/>
+<TokenizerPrimitive />
 
 ## Architecture essentials
 
@@ -121,7 +121,7 @@ Self-attention is permutation-invariant by construction. The model has to be tol
 
 The literature has not settled on a single winner. RoPE is the most common choice in open frontier models as of writing, but the space is actively evolving — don't assume a paper's positional scheme is the one a deployed model uses.
 
-<AttentionHeatmap/>
+<AttentionHeatmap />
 
 ## Model size and scaling laws
 
@@ -180,7 +180,7 @@ temp=1.2, top_p=0.95 →  "Somewhere past the breakers, a column of light falls
 
 All three are plausible continuations. None is the "correct" one — they sit in different regions of the same distribution.
 
-<TemperatureSampler/>
+<TemperatureSampler />
 
 ::callout{type="info"}
 Sampling parameters are a product decision, not a default. Classification: temperature 0. Creative generation: temperature ≥ 0.7 with top-p. Structured output with retries: low temperature, no top-p exotica. Pick deliberately.

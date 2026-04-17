@@ -85,7 +85,7 @@ The common rule of thumb for **full fine-tuning with Adam in mixed precision** i
 
 That totals ~16 bytes/param. For a 7B model that's ~112 GB **before activations** — which is why full fine-tuning a 7B model does not fit on a single 80GB A100, let alone a 24GB consumer card. Activations can easily add tens of GB more depending on sequence length and batch size.
 
-<MemoryCalculator/>
+<MemoryCalculator />
 
 The levers to shrink this bill:
 
