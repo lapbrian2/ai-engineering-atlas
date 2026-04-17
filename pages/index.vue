@@ -20,6 +20,8 @@ useHead({
 
     <TickerStrip />
 
+    <BooksMarquee />
+
     <TopicsGrid />
 
     <ConceptAtlasPin />
