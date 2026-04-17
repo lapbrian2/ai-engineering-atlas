@@ -1,8 +1,9 @@
 <script setup lang="ts">
 const route = useRoute()
-const { data: topic } = await useAsyncData(`topic-${route.params.slug}`, () =>
+const slug = String(route.params.slug)
+const { data: topic } = await useAsyncData(`topic-${slug}`, () =>
   queryCollection('topics')
-    .where('stem', 'LIKE', `%${route.params.slug}%`)
+    .where('id', '=', slug)
     .first()
 )
 

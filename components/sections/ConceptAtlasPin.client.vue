@@ -1,13 +1,13 @@
 <script setup lang="ts">
 const concepts = [
-  { idx: '01 / 40', topic: 'Foundation',  title: 'Byte-pair',   em: 'encoding',   body: 'How text becomes tokens. Subword merging, vocabulary size, compression ratio.', viz: 'bpe',    tag: 'T01 · FOUNDATION' },
-  { idx: '02 / 40', topic: 'Foundation',  title: 'Attention',   em: 'mechanism',  body: 'Query-key-value dot products, softmax normalization, multi-head attention.',     viz: 'attn',   tag: 'T01 · FOUNDATION' },
-  { idx: '03 / 40', topic: 'Foundation',  title: 'Temperature', em: '& sampling', body: 'Probability distributions, top-k, top-p, deterministic vs creative generation.', viz: 'sample', tag: 'T01 · FOUNDATION' },
-  { idx: '04 / 40', topic: 'Prompt Eng',  title: 'Few-shot',    em: 'prompting',  body: 'In-context learning. Exemplar selection and ordering effects.',                 viz: 'shot',   tag: 'T02 · PROMPT ENG' },
-  { idx: '05 / 40', topic: 'Prompt Eng',  title: 'Chain-of-',   em: 'thought',    body: 'Giving the model time to think. Zero-shot CoT, self-consistency.',              viz: 'cot',    tag: 'T02 · PROMPT ENG' },
-  { idx: '06 / 40', topic: 'RAG',         title: 'Vector',      em: 'retrieval',  body: 'Dense vs sparse. BM25 + HNSW. Hybrid search scoring.',                          viz: 'retr',   tag: 'T04 · RAG & AGENTS' },
-  { idx: '07 / 40', topic: 'Agents',      title: 'Agent',       em: 'planning',   body: 'ReAct loops, tool-use, task decomposition, reflection.',                        viz: 'agent',  tag: 'T04 · RAG & AGENTS' },
-  { idx: '08 / 40', topic: 'Finetuning',  title: 'LoRA',        em: 'adapters',   body: 'Low-rank adaptation. Rank selection, layer targeting, memory math.',            viz: 'lora',   tag: 'T05 · FINETUNING' }
+  { idx: '01 / 40', slug: 'tokenization',      topic: 'Foundation', title: 'Byte-pair',   em: 'encoding',   body: 'How text becomes tokens. Subword merging, vocabulary size, compression ratio.', viz: 'bpe',    tag: 'T01 · FOUNDATION' },
+  { idx: '02 / 40', slug: 'attention-mechanism',topic: 'Foundation', title: 'Attention',   em: 'mechanism',  body: 'Query-key-value dot products, softmax normalization, multi-head attention.',     viz: 'attn',   tag: 'T01 · FOUNDATION' },
+  { idx: '03 / 40', slug: 'sampling-strategies',topic: 'Foundation', title: 'Temperature', em: '& sampling', body: 'Probability distributions, top-k, top-p, deterministic vs creative generation.', viz: 'sample', tag: 'T01 · FOUNDATION' },
+  { idx: '04 / 40', slug: 'zero-shot-few-shot', topic: 'Prompting',  title: 'Few-shot',    em: 'prompting',  body: 'In-context learning. Exemplar selection and ordering effects.',                 viz: 'shot',   tag: 'T02 · PROMPTING' },
+  { idx: '05 / 40', slug: 'chain-of-thought',   topic: 'Prompting',  title: 'Chain-of-',   em: 'thought',    body: 'Giving the model time to think. Zero-shot CoT, self-consistency.',              viz: 'cot',    tag: 'T02 · PROMPTING' },
+  { idx: '06 / 40', slug: 'vector-search',      topic: 'RAG',        title: 'Vector',      em: 'retrieval',  body: 'Dense vs sparse. BM25 + HNSW. Hybrid search scoring.',                          viz: 'retr',   tag: 'T04 · RAG & AGENTS' },
+  { idx: '07 / 40', slug: 'agent-planning',     topic: 'Agents',     title: 'Agent',       em: 'planning',   body: 'ReAct loops, tool-use, task decomposition, reflection.',                        viz: 'agent',  tag: 'T04 · RAG & AGENTS' },
+  { idx: '08 / 40', slug: 'lora-qlora',         topic: 'Finetuning', title: 'LoRA',        em: 'adapters',   body: 'Low-rank adaptation. Rank selection, layer targeting, memory math.',            viz: 'lora',   tag: 'T05 · FINETUNING' }
 ] as const
 
 const root = ref<HTMLElement | null>(null)
@@ -44,7 +44,12 @@ onMounted(() => {
     </div>
     <div class="atlas-inner">
       <div ref="track" class="atlas-track">
-        <div v-for="c in concepts" :key="c.idx" class="atlas-card">
+        <NuxtLink
+          v-for="c in concepts" :key="c.idx"
+          :to="`/concepts/${c.slug}`"
+          class="atlas-card"
+          data-hover
+        >
           <div class="c-top">
             <span class="c-idx">{{ c.idx }}</span>
             <span class="c-topic">{{ c.topic }}</span>
@@ -58,7 +63,7 @@ onMounted(() => {
             <span>{{ c.tag }}</span>
             <span class="go">OPEN →</span>
           </div>
-        </div>
+        </NuxtLink>
       </div>
     </div>
   </section>
