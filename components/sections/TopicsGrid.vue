@@ -130,19 +130,6 @@ const topics = [
   color: inherit;
 }
 .topic:active { transform: translateY(1px); }
-
-@supports (animation-timeline: view()) {
-  .topic {
-    opacity: 0;
-    transform: translateY(18px);
-    animation: topic-reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 55%;
-  }
-  @keyframes topic-reveal {
-    to { opacity: 1; transform: translateY(0); }
-  }
-}
 .topic::before {
   content: '';
   position: absolute;
