@@ -18,6 +18,8 @@ useHead(() => ({
 <template>
   <main class="topic-page">
     <article v-if="topic">
+      <ReadingProgress />
+      <TableOfContents selector=".prose" />
       <header class="topic-head">
         <div class="max">
           <NuxtLink to="/#topics" class="back" data-hover>
