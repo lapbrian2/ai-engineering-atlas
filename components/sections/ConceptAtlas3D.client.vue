@@ -30,14 +30,19 @@ const ACCENT_HEX = '#D15B2C'
 const INK_HEX = '#0A0A0E'
 const TEXT_HEX = '#E8E8EE'
 
-onMounted(() => {
-  console.log('[ConceptAtlas3D] onMounted fired, container:', !!container.value)
-  if (!container.value) {
-    console.log('[ConceptAtlas3D] no container, aborting')
+function tryInit(attempts = 0) {
+  const el = container.value
+  if (!el) {
+    if (attempts < 30) {
+      setTimeout(() => tryInit(attempts + 1), 50)
+    } else {
+      console.warn('[ConceptAtlas3D] container never arrived after 1.5s')
+      status.value = 'error'
+    }
     return
   }
+  console.log('[ConceptAtlas3D] starting init, attempt:', attempts)
   try {
-    console.log('[ConceptAtlas3D] starting init')
     const ACCENT = new THREE.Color(ACCENT_HEX)
     const INK = new THREE.Color(INK_HEX)
     const TEXT = new THREE.Color(TEXT_HEX)
@@ -85,8 +90,8 @@ onMounted(() => {
     const scene = new THREE.Scene()
     scene.fog = new THREE.Fog(INK, 140, 340)
 
-    const w = container.value.clientWidth
-    const h = container.value.clientHeight || 720
+    const w = el.clientWidth
+    const h = el.clientHeight || 720
     const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000)
     camera.position.set(180, 30, 180)
 
@@ -94,7 +99,7 @@ onMounted(() => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     renderer.setSize(w, h)
     renderer.setClearColor(INK, 0)
-    container.value.appendChild(renderer.domElement)
+    el.appendChild(renderer.domElement)
 
     // ---------- Nodes ----------
     const nodeGeom = new THREE.SphereGeometry(1, 18, 18)
@@ -163,8 +168,8 @@ onMounted(() => {
     let hoveredIndex = -1
 
     const onPointerMove = (e: PointerEvent) => {
-      if (!container.value) return
-      const rect = container.value.getBoundingClientRect()
+      if (!el) return
+      const rect = el.getBoundingClientRect()
       pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(pointer, camera)
@@ -201,9 +206,9 @@ onMounted(() => {
 
     // ---------- Resize ----------
     const onResize = () => {
-      if (!container.value) return
-      const W = container.value.clientWidth
-      const H = container.value.clientHeight || 720
+      if (!el) return
+      const W = el.clientWidth
+      const H = el.clientHeight || 720
       renderer.setSize(W, H)
       camera.aspect = W / H
       camera.updateProjectionMatrix()
@@ -213,8 +218,8 @@ onMounted(() => {
     // ---------- Scroll → camera orbit offset ----------
     let scrollProgress = 0
     const onScroll = () => {
-      if (!container.value) return
-      const rect = container.value.getBoundingClientRect()
+      if (!el) return
+      const rect = el.getBoundingClientRect()
       const viewport = window.innerHeight
       scrollProgress = Math.max(0, Math.min(1, (viewport - rect.top) / (viewport + rect.height)))
     }
@@ -243,7 +248,7 @@ onMounted(() => {
       if (visible && !running) { running = true; loop() }
       else if (!visible) { running = false; cancelAnimationFrame(rafId) }
     }, { threshold: 0 })
-    io.observe(container.value)
+    io.observe(el)
 
     // Kick off
     loop()
@@ -265,14 +270,18 @@ onMounted(() => {
       edgeMat.dispose()
       ringGeom.dispose()
       ringMat.dispose()
-      if (container.value) {
-        try { container.value.removeChild(renderer.domElement) } catch {}
+      if (el) {
+        try { el.removeChild(renderer.domElement) } catch {}
       }
     })
   } catch (e) {
     console.error('[ConceptAtlas3D] init failed:', e)
     status.value = 'error'
   }
+}
+
+onMounted(() => {
+  tryInit()
 })
 </script>
 
